@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"%>
 
 <% 
-com.f2c.Reg reg = new Reg();
+Reg reg = new Reg();
 reg.setNickname("yangfan");
-out.print(com.alibaba.fastjson.JSON.toJSONString(reg));
+out.print(JSON.toJSONString(reg));
 %>
