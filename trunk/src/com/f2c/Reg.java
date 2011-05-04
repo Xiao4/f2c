@@ -1,5 +1,8 @@
 package com.f2c;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Reg {
 	private String nickname;
 	private int gender;

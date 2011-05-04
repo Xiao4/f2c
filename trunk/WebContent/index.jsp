@@ -5,9 +5,32 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.json.js"></script>
 </head>
 <body>
-1中文
+
+<div id="aa" ></div>
+
+<script type="text/javascript">
+$(function(){
+	var reg = {
+			province:200,
+			city:202,
+			gender:1,
+			agreement:true
+			};
+	$.ajax({
+		url:'/rest/status',
+		data:$.toJSON(reg),
+		type:'POST',
+		success:function(r){
+			$('#aa').html(r);
+			},
+			contentType:"application/json; charset=utf-8"
+		});
+});
+</script>
 
 </body>
 </html>
