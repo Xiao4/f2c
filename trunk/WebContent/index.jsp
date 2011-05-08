@@ -5,8 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/jquery.json.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.json.js"></script>
+<script type="text/javascript" src="js/genesis.js"></script>
 </head>
 <body>
 
@@ -20,6 +21,9 @@ $(function(){
 			gender:1,
 			agreement:true
 			};
+	$.serviceProxy({
+	
+		});
 	$.ajax({
 		url:'/rest/status',
 		data:$.toJSON(reg),
