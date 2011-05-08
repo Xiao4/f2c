@@ -9,7 +9,7 @@ import org.springframework.util.Table;
 /**
  * 
  * 好友关系
- * 
+ *  
  * @author lihuan
  * 
  */
