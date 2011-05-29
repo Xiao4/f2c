@@ -8,8 +8,6 @@
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <script type="text/javascript">
 var friendList =${friendListJson}; 
-
-
 </script>
 </head>
 <body>
@@ -56,12 +54,15 @@ var friendList =${friendListJson};
 	</div>
 	<div class="list">
 	  <div class="search">
-	    <input name="" type="text" class="i-n" value="search" />
-		<input type="submit" class="search_btn" value="" />
+<form id="search">
+	    <input id="search_keyword" name="keyword" type="text" class="i-n" value="search" />
+	    <input type="submit" class="search_btn" value="" />
+</form>
 	  </div>
 	  <ul class="clearfix">
   <c:forEach items="${friendList}" var="friend" varStatus="status">
-	    <li franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span></li>
+	    <li id="contact${friend.mobileUID}"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span></li>
+	    <li id="contact${friend.mobileUID}" class="new"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span></li>
   </c:forEach>
 	  </ul>
 	</div>
@@ -83,24 +84,23 @@ var friendList =${friendListJson};
 	  <div class="txt sending"><b></b>
 	    <p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
 	  </div>
-	  <div class="txt sending"><b></b>
-	    <p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
-	  </div>
-	  <div class="txt sending"><b></b>
-	    <p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
-	  </div>
 	</div>
 
 	<div class="editor_box clearfix">
-	  <textarea rows="" cols="" id="" class="" name="text"></textarea>
+	  <textarea rows="" cols="" id="editor" class="" name="textmsg"></textarea>
 	  <div class="op">
-	    <input type="submit" class="btn_send" value="" id="button" name="button">
-	    <p>140<p>
+	    <input type="submit" class="btn_send" value="" id="editor_submit" name="button">
+	    <p id="editor_limit">140<p>
 	  </div>
 	</div>
   </div>
-
-
 </div>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.iprompt.js"></script>
+<script type="text/javascript" src="js/jquery.textbox.js"></script>
+<script type="text/javascript" src="js/formater.js"></script>
+<script type="text/javascript" src="js/jquery.searchlist.js"></script>
+<script type="text/javascript" src="js/jquery.feedlist.js"></script>
+<script type="text/javascript" src="js/m2c.js"></script>
 </body>
 </html>
