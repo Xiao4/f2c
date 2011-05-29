@@ -100,7 +100,8 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .contacts li span{display:block;float:left;text-indent:6px;}
 .contacts li span.name{width:35%;}
 .contacts li span.phone{width:65%;}
-.contacts li:hover{background:#d8dfea}
+.contacts li:hover, .contacts li.current{background:#d8dfea}
+.contacts li.new{background:#FFECBF}
 
 .mail_box{width:308px;padding-top:39px; border:#dadada solid 1px;background:url(../images/bg_pic-2.jpg) no-repeat top; float:right;}
 .txt_box{height:363px;padding:0 10px;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
