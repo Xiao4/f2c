@@ -37,14 +37,16 @@ var friendList =${friendListJson};
 	   </div>
 	 </div>
      <div class="sevs">
-	   <p><a href="#"><img src="images/test_icon.png" />m2you&nbsp;home</a></p>
-	   <p><a href="#"><img src="images/test_icon.png" />Add&nbsp;contact</a></p>
-	   <p><a href="#"><img src="images/test_icon.png" />signature</a></p>
+	   <p><a href="#"><span class="icon_m2you"></span>m2you&nbsp;home</a></p>
+	   <p><a href="#"><span class="add"></span>Add&nbsp;contact</a></p>
+	   <p><a href="#"><span class="sign"></span>signature</a></p>
 	 </div>
      <div class="invite">
 	   <a href="#"></a>
 	 </div>
 	 <div class="embed_box"></div>
+     
+
   </div>
 
   <div class="contacts clearfix">
@@ -61,8 +63,8 @@ var friendList =${friendListJson};
 	  </div>
 	  <ul class="clearfix">
   <c:forEach items="${friendList}" var="friend" varStatus="status">
-	    <li id="contact${friend.mobileUID}"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span></li>
-	    <li id="contact${friend.mobileUID}" class="new"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span></li>
+	    <li id="contact${friend.mobileUID}"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="#" title="修改姓名"></a></span></li>
+	    <li id="contact${friend.mobileUID}" class="new"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="#" title="修改姓名"></a></span></li>
   </c:forEach>
 	  </ul>
 	</div>
@@ -72,20 +74,24 @@ var friendList =${friendListJson};
   
 
   <div class="mail_box">
+	<div id="feedListContainer">
     <div class="txt_box">
 	  <div class="txt in"><b></b>
-		<p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+		<p><strong>M2you:</strong>You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+		<p><span class="gray">10:41 PM</span></p>
 	  </div>
 
 	  <div class="txt out"><b></b>
-	    <p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+	    <p><strong>Me:</strong>You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+		<p><span class="gray">10:41 PM</span></p>
 	  </div>
 
-	  <div class="txt sending"><b></b>
-	    <p><span class="gray">10:41 PM</span> You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+	  <div class="txt in"><b></b>
+	    <p><strong>M2you:</strong>You just added  <span class="orange">"Xu Feng"</span>to啊 your contact list. Please inform him to accept your invitation and then send him text messages, or he can not receive text messages you send.啊</p>
+		<p><span class="gray">10:41 PM</span></p>
 	  </div>
 	</div>
-
+	</div>
 	<div class="editor_box clearfix">
 	  <textarea rows="" cols="" id="editor" class="" name="textmsg"></textarea>
 	  <div class="op">
@@ -102,5 +108,11 @@ var friendList =${friendListJson};
 <script type="text/javascript" src="js/jquery.searchlist.js"></script>
 <script type="text/javascript" src="js/jquery.feedlist.js"></script>
 <script type="text/javascript" src="js/m2c.js"></script>
+<script type="text/javascript">
+$(function(){
+	var $feedContainer = $('#feedListContainer');
+	console.log($feedContainer.feedlist('a').show());
+});
+</script>
 </body>
 </html>
