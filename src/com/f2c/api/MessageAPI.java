@@ -1,5 +1,8 @@
 package com.f2c.api;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +43,7 @@ public class MessageAPI extends BaseAPI {
 	
 	/**
 	 * 发送私聊信息
-	 * 测试地址：http://localhost:8888/f2c/msg/send.json?friend_id=dc64fd98-f443-4e20-8438-5634bb0a81b0&text=123123
+	 * 测试地址：http://localhost:8080/f2c/msg/send.json?friend_id=dc64fd98-f443-4e20-8438-5634bb0a81b0&text=123123
 	 * @param request
 	 * @param response
 	 * @return
@@ -70,18 +73,18 @@ public class MessageAPI extends BaseAPI {
 	
 	/**
 	 * 获取私聊信息
-	 * 测试地址：http://localhost:8888/f2c/msg/send.json?friend_id=dc64fd98-f443-4e20-8438-5634bb0a81b0&text=123123
+	 * 测试地址：http://localhost:8888/f2c/msg/history.json?friend_id=dc64fd98-f443-4e20-8438-5634bb0a81b0&max_id=233059605&count=1
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/get")
+	@RequestMapping(value = "/history")
 	public Map<String, Object> get(HttpServletRequest request, HttpServletResponse response){
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("loginUser");
 		String friendID = request.getParameter("friend_id");
 		Integer maxId = null;
-		Integer count = null;
+		Integer count = 3;
 		if (request.getParameter("max_id") != null) {
 			maxId = Integer.valueOf(request.getParameter("max_id"));
 		}
@@ -103,6 +106,53 @@ public class MessageAPI extends BaseAPI {
 			return createResults(ResultsUtil.SUCCESS, returnArry.toString());
 		} catch (RuntimeException e) {
 			return createResults(ResultsUtil.FAILED);
+		}
+	}
+
+	/**
+	 * 获取最新私聊
+	 * 测试地址：http://localhost:8080/f2c/msg/latest.json
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/latest")
+	public Map<String, Object> getLatestMessage(HttpServletRequest request, HttpServletResponse response){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("loginUser");
+		List<Friend> friendList = friendService.getFriendListByUID(user.getId());
+		Map<String, List<Object>> data = new HashMap<String, List<Object>>();
+		int count = OpenPlatform.countDirectMessage(Integer.valueOf(user.getMobileUID()));
+		if (count != 0) {
+			JSONArray jsonArray = OpenPlatform.directMessagesAllDialog(Integer.valueOf(user.getMobileUID()), null, count);
+			List<Object> unknow = new ArrayList<Object>();
+			for (Friend friend : friendList) {
+				List<Object> messages = new ArrayList<Object>();
+				for (int i =0; i < jsonArray.size(); i ++) {
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String message = jsonObject.toString();
+					if (friend.getMobileUID().equals(jsonObject.getString("user_id"))) {
+						messages.add(message);
+						unknow.remove(message);
+					} else {
+						if (!unknow.contains(message)) {
+							unknow.add(message);
+						}
+					}
+				}
+				if(messages.size() > 0) {
+					data.put(friend.getUserID(), messages);	
+				}
+			}
+			if (unknow.size() > 0) {
+				data.put("unknow", unknow);
+			}
+			if (data.size() >0) {
+				OpenPlatform.clearDirectMessageCount(Integer.valueOf(user.getMobileUID()));
+			}
+			return createResults(ResultsUtil.SUCCESS, data);
+		} else {
+			return createResults(ResultsUtil.MESSAGE_HASNO_LATEST);
 		}
 	}
 }

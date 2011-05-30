@@ -17,6 +17,7 @@ import com.f2c.entity.Friend;
 import com.f2c.entity.User;
 import com.f2c.service.FriendService;
 import com.f2c.service.UserService;
+import com.f2c.utils.OpenPlatform;
 import com.f2c.utils.ResultsUtil;
 
 /**
@@ -62,6 +63,7 @@ public class FriendAPI extends BaseAPI {
 		}
 		try {
 			Friend friend = friendService.add(user, mobile, nickname);
+			OpenPlatform.invite(Integer.valueOf(user.getMobileUID()), mobile);
 			return createResults(ResultsUtil.SUCCESS, friend);
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());
@@ -71,7 +73,7 @@ public class FriendAPI extends BaseAPI {
 	
 	/**
 	 * 删除好友
-	 * 测试地址：http://localhost:8080/f2c/f/delete.json?f_id=
+	 * 测试地址：http://localhost:8080/f2c/f/delete.json?f_id=3b78cb03-e022-4c7f-8105-042e1dfd1d0c
 	 * @param request
 	 * @param response
 	 * @return
@@ -90,7 +92,7 @@ public class FriendAPI extends BaseAPI {
 		try {
 			boolean success = friendService.deleteByID(fId);
 			if (success) {
-				return createResults(ResultsUtil.SUCCESS);
+				return createResults(ResultsUtil.SUCCESS, fId);
 			} else {
 				return createResults(ResultsUtil.FAILED);
 			}
@@ -103,12 +105,12 @@ public class FriendAPI extends BaseAPI {
 	
 	/**
 	 * 修改好友信息
-	 * 测试地址：http://localhost:8080/f2c/f/delete.json?f_id=xxxxxxxxxx&f_name=xxxxxxxxxxxxx
+	 * 测试地址：http://localhost:8080/f2c/f/update.json?f_id=xxxxxxxxxx&f_name=xxxxxxxxxxxxx
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/delete")
+	@RequestMapping(value = "/update")
 	public Map<String, Object> update(HttpServletRequest request, HttpServletResponse response){
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("loginUser");
@@ -126,7 +128,7 @@ public class FriendAPI extends BaseAPI {
 				friend.setNickname(fName);
 				boolean success = this.friendService.update(friend);
 				if (success) {
-					return createResults(ResultsUtil.SUCCESS);
+					return createResults(ResultsUtil.SUCCESS, friend);
 				} else {
 					return createResults(ResultsUtil.FAILED);
 				}

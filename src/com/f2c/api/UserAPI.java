@@ -1,6 +1,5 @@
 package com.f2c.api;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.f2c.entity.Friend;
 import com.f2c.entity.User;
-import com.f2c.service.FriendService;
 import com.f2c.service.UserService;
 import com.f2c.utils.ResultsUtil;
 
@@ -32,41 +29,47 @@ public class UserAPI extends BaseAPI {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
-	private FriendService friendService;
+	private UserService userService;
 	
 	/**
-	 * 添加好友
-	 * 测试地址：http://localhost:8080/f2c/f/add.json?mobile=13810554162&nickname=Li Huan
+	 * 修改个人信息
+	 * 测试地址：http://localhost:8080/f2c/u/update.json?nickname=LiHuan&nickname_switch=1
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/add")
-	public Map<String, Object> add(HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/update")
+	public Map<String, Object> update(HttpServletRequest request, HttpServletResponse response){
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("loginUser");
-		String mobile = request.getParameter("mobile");
 		String nickname = request.getParameter("nickname");
+		int nicknameSwitch = -1;
 		if (user == null) {
 			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 		}
-		if (mobile == null) {
-			return createResults(ResultsUtil.PARAMETER_MOBILE_REQUIRE);
+		if (request.getParameter("nickname_switch") != null) {
+			nicknameSwitch = parseInt(request.getParameter("nickname_switch"));
 		}
-		if (nickname == null) {
-			return createResults(ResultsUtil.PARAMETER_NICKNAME_REQUIRE);
+		if (nickname != null) {
+			user.setNickname(nickname);
 		}
-		List<Friend> friendList = friendService.getFriendByMobile(user.getId(), mobile);
-		if (friendList != null && friendList.size() > 0) {
-			return createResults(ResultsUtil.FRIEND_ALREAY_EXISTS, friendList.get(0));
+		if (nicknameSwitch == 0) {
+			user.setNicknameSwitch(false);
+		} else if(nicknameSwitch == 1) {
+			user.setNicknameSwitch(true);
 		}
 		try {
-			Friend friend = friendService.add(user, mobile, nickname);
-			return createResults(ResultsUtil.SUCCESS, friend);
+			user = this.userService.update(user);
+			if (user != null) {
+				session.setAttribute("loginUser", user);
+				return createResults(ResultsUtil.SUCCESS, user);
+			} else {
+				user = (User) session.getAttribute("loginUser");
+				return createResults(ResultsUtil.FAILED, user);
+			}
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());
 			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
 		}
 	}
-	
 }

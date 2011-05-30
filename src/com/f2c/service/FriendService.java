@@ -84,7 +84,7 @@ public class FriendService extends BaseService {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * 根据用户ID、手机号码获取该用户的好友
 	 * @param mobile

@@ -34,7 +34,7 @@ import com.f2c.service.UserService;
  * 
  */
 @Controller
-@RequestMapping("/")
+//@RequestMapping("/")
 public class IndexController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(UserService.class);

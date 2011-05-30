@@ -26,7 +26,6 @@ import com.f2c.utils.FacebookUtil;
  * 
  */
 @Controller
-@RequestMapping("/")
 public class WelcomeController extends BaseController {
 
 	private static final long serialVersionUID = 1L;

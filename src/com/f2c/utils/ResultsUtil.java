@@ -17,6 +17,7 @@ public class ResultsUtil {
 	public static final int PARAMETER_TEXT_REQUIRE = 2005;
 	public static final int PARAMETER_FRIENDID_REQUIRE = 2006;
 	public static final int FRIEND_ALREAY_EXISTS = 2100; 
+	public static final int MESSAGE_HASNO_LATEST = 2200; 
 
 	private static Map<String, String> messages;
 
@@ -34,6 +35,7 @@ public class ResultsUtil {
 		messages.put(String.valueOf(PARAMETER_TEXT_REQUIRE), "发送内容不能为空");
 		messages.put(String.valueOf(PARAMETER_FRIENDID_REQUIRE), "好友ID是必传参数");
 		messages.put(String.valueOf(FRIEND_ALREAY_EXISTS), "已经添加过此手机号码");
+		messages.put(String.valueOf(MESSAGE_HASNO_LATEST), "没有新消息");
 	}
 
 	public static String getMessage(int code) {
