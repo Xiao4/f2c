@@ -1,19 +1,24 @@
 ;(function($){
-	var feedListCache = {};
+	var feedListCache = {},currentList = null;
 	$.extend({
-		getFeedContainer:function(userid,box){
+		feedlist:function(userid,box){
 			var container =feedListCache[userid];
+			if(!box) box = document.body;
+			if(!currentList){
+				currentList = $(box).find('div.txt_box:visible');
+			}
 			if(!container){
-				if(!box) box = document.body;
-				var $c = $box.append('<div class="txt_box" style="display:none" rel="'+userid+'"></div>');
+				var $c = $('<div class="txt_box" style="display:none" rel="'+userid+'"></div>').appendTo(box);
 				container = feedListCache[userid] = $c;
 			};
+			currentList.hide();
+			currentList = container;	
 			return container;
 		}
 	});
 	$.fn.extend({
-		getFeedContainer:function(userid){
-			return $.getFeedContainer(userid ,this);
+		feedlist:function(userid){
+			return $.feedlist(userid ,this);
 		}
 
 	});

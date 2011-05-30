@@ -2,11 +2,12 @@
 	var $userList = null;
 	$.extend({
 		searchList:function(input,box){
-			if(str == $("#searchKey").attr("title")){
+			/*
+			if(str == $(input).attr("title")){
 		        str = "";
 	        }
 	        if(str){
-	            var regex = eval("/\\d+\\t\\d+\\t.*"+str+".*/gi");
+	            var regex = eval("\/\\d+\\t\\d+\\t.*"+str+".*\/gi");
 	            var i= 0;
 	            var temp = [];
 	            $(searchIndex).each(function(index,item){
@@ -36,9 +37,11 @@
 	        }else{
 	            showSearchBtn("close");
 	        }
-		return $(box).each({
 
-		});
+			*/
+			return $(box).each(function(index,item){
+				
+			});
 		}
 	});
 	$.fn.extend({
