@@ -1,6 +1,7 @@
 package com.f2c.utils;
 
 import java.util.Date;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -181,27 +182,28 @@ public class OpenPlatform {
 	 *            获取说客数量 最大上限 50 默认30
 	 * @return
 	 */
-	public static String directMessagesAllDialog(int baAuthUid, Integer maxId,
+	public static JSONArray directMessagesAllDialog(int baAuthUid, Integer maxId,
 			Integer count) {
 		String response = "";
-		UTF8PostMethod postMethod = null;
+		UTF8GetMethod getMethod = null;
 		try {
-			postMethod = getPostMethod("/directmessages/alldialog.json");
-			postMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
+			getMethod = getGetMethod("/directmessages/alldialog.json");
+			getMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
 			if (maxId != null) {
-				postMethod.addParameter("max_id", String.valueOf(maxId));
+				getMethod.addParameter("max_id", String.valueOf(maxId));
 			}
 			if (count != null) {
-				postMethod.addParameter("count", String.valueOf(count));
+				getMethod.addParameter("count", String.valueOf(count));
 			}
-			httpClient.executeMethod(postMethod);
-			response = postMethod.getResponseBodyAsString();
+			httpClient.executeMethod(getMethod);
+			response = getMethod.getResponseBodyAsString();
+			return JSONArray.fromObject(response);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return null;
 		} finally {
-			OpenPlatform.releaseConnection(postMethod);
+			OpenPlatform.releaseConnection(getMethod);
 		}
-		return response;
 	}
 
 	// mobile/get_uid_by_mn.json
@@ -233,10 +235,10 @@ public class OpenPlatform {
 		}
 	}
 	
-	//util/sms_invite.php 
+	//mobile/captcha.json
 	/**
 	 * 
-	 * 通过手机号获得UID
+	 * 邀请并粉
 	 * 
 	 * @param baAuthUid
 	 *            发送人说客用户id
@@ -244,34 +246,131 @@ public class OpenPlatform {
 	 *            手机号
 	 * @return
 	 */
-	public static String add(int baAuthUid, String mobile) {
+	public static JSONArray invite(int baAuthUid, List<String> mobiles) {
 		String response = "";
-		UTF8GetMethod getMethod = null;
+		UTF8PostMethod postMethod = null;
 		try {
-			getMethod = getGetMethod("/mobile/get_uid_by_mn.json");
-			getMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
-			getMethod.addParameter("mobile", String.valueOf(mobile));
-			httpClient.executeMethod(getMethod);
-			response = getMethod.getResponseBodyAsString();
-			return JSONObject.fromObject(response).getString("user_id");
+			postMethod = getPostMethod("/mobile/invite.json");
+			postMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
+			if (mobiles == null) {
+				throw new RuntimeException("参数List<String> mobiles不能为空");
+			}
+			String mobilesStr = "";
+			for (String mobile : mobiles) {
+				mobilesStr += mobile + ",";
+			}
+			if (mobilesStr.endsWith(",")) {
+				mobilesStr = mobilesStr.substring(0, mobilesStr.length() -1);
+			}
+			postMethod.addParameter("mobiles", mobilesStr);
+			httpClient.executeMethod(postMethod);
+			response = postMethod.getResponseBodyAsString();
+			return JSONArray.fromObject(response);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return null;
 		} finally {
+			OpenPlatform.releaseConnection(postMethod);
+		}
+	}
+	public static JSONArray invite(int baAuthUid, String mobile) {
+		String response = "";
+		UTF8PostMethod postMethod = null;
+		try {
+			postMethod = getPostMethod("/mobile/invite.json");
+			postMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
+			if (mobile == null) {
+				throw new RuntimeException("参数String mobile不能为空");
+			}
+			postMethod.addParameter("mobiles", mobile);
+			httpClient.executeMethod(postMethod);
+			response = postMethod.getResponseBodyAsString();
+			return JSONArray.fromObject(response);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		} finally {
+			OpenPlatform.releaseConnection(postMethod);
+		}
+	}
+
+	//count/get.json
+	/**
+	 * 
+	 * 获取私聊增量
+	 * 
+	 * @param baAuthUid
+	 *            说客用户id
+	 * @return
+	 */
+	public static int countDirectMessage(int baAuthUid) {
+		String response = "";
+		UTF8GetMethod getMethod = null;
+		try {
+			getMethod = getGetMethod("/count/get.json");
+			getMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
+			getMethod.addParameter("type", "delta");
+			getMethod.addParameter("key", "dr");
+			getMethod.addParameter("dataid", String.valueOf(baAuthUid));
+			httpClient.executeMethod(getMethod);
+			response = getMethod.getResponseBodyAsString();
+			JSONObject jsonObject = JSONArray.fromObject(response).getJSONObject(0);
+			int count = Integer.valueOf(jsonObject.getString("value"));
+			return count;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return 0;
+		} finally {
 			OpenPlatform.releaseConnection(getMethod);
 		}
 	}
-	
+	//count/set.json
+	/**
+	 * 
+	 * 清除私聊增量
+	 * 
+	 * @param baAuthUid
+	 *            说客用户id
+	 * @return
+	 */
+	public static JSONObject clearDirectMessageCount(int baAuthUid) {
+		String response = "";
+		UTF8PostMethod postMethod = null;
+		try {
+			postMethod = getPostMethod("/count/set.json");
+			postMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
+			postMethod.addParameter("type", "delta");
+			postMethod.addParameter("key", "dr");
+			postMethod.addParameter("dataid", String.valueOf(baAuthUid));
+			httpClient.executeMethod(postMethod);
+			response = postMethod.getResponseBodyAsString();
+			return JSONObject.fromObject(response);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		} finally {
+			OpenPlatform.releaseConnection(postMethod);
+		}
+	}
 	public static void main(String[] args) throws InterruptedException {
 		JSONObject object = null;
 		JSONArray array = null;
 		// 李欢48173783
 		// 蔡峰37013942
 		// 崔超33261973
-//		object = directMessagesAdd(1231231231, 33261973, "哥做测试你丫举报,你妹!!!");
-		 array = directMessagesDialog(48173783, 37013942, null, 1);
+		//6744852
+		object = directMessagesAdd(6744852, 48173783, "1");
+//		List<String> mobiles = new ArrayList<String>();
+//		mobiles.add("13810138286");
+//		array = invite(48173783, mobiles);
+//		array = directMessagesDialog(48173783, 37013942, null, 1);
 		// array = directMessagesAllDialog(37013942, 227340517, 10);
 		// System.out.println(a);
+		int count = countDirectMessage(48173783);
+//		object = clearDirectMessageCount(48173783);
+
+		System.out.println(count);
 		System.out.println(array);
+		System.out.println(object);
 	}
 }

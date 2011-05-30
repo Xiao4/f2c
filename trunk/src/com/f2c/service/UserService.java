@@ -80,5 +80,13 @@ public class UserService extends BaseService {
 		mobileUserService.updateStateById(mobileUID);
 		return user;
 	}
+	
+	public User update(User user){
+		if (this.userDAO.update(user)) {
+			return user;
+		} else {
+			return null;
+		}
+	}
 
 }
