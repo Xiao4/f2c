@@ -3,8 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <script type="text/javascript">
 var friendList =${friendListJson}; 
@@ -92,13 +92,16 @@ var friendList =${friendListJson};
 	  </div>
 	</div>
 	</div>
+	<form action="msg/send.json" method="post">
 	<div class="editor_box clearfix">
-	  <textarea rows="" cols="" id="editor" class="" name="textmsg"></textarea>
+	  <input name="friend_id" type="text" />
+	  <textarea rows="" cols="" id="editor" class="" name="text"></textarea>
 	  <div class="op">
 	    <input type="submit" class="btn_send" value="" id="editor_submit" name="button">
 	    <p id="editor_limit">140<p>
 	  </div>
 	</div>
+	</form>
   </div>
 </div>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -112,6 +115,15 @@ var friendList =${friendListJson};
 $(function(){
 	var $feedContainer = $('#feedListContainer');
 	console.log($feedContainer.feedlist('a').show());
+	$('input[type="submit"]').click(function(){
+		var o = {};
+		for(var i in this.form.elements)
+			o[this.form.elements[i].name] = this.form.elements[i].value;
+		$.post(this.form.action,o,function(r){
+			console.log(r);
+		});
+		return false;
+	});
 });
 </script>
 </body>
