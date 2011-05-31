@@ -6,9 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/style.css" type="text/css" />
-<script type="text/javascript">
-var friendList =${friendListJson}; 
-</script>
+
 </head>
 <body>
 <div style="display:none">我的信息：
@@ -61,11 +59,14 @@ var friendList =${friendListJson};
 	    <input type="submit" class="search_btn" value="" />
 </form>
 	  </div>
-	  <ul class="clearfix">
-  <c:forEach items="${friendList}" var="friend" varStatus="status">
-	    <li id="contact${friend.mobileUID}"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="#" title="修改姓名"></a></span></li>
-	    <li id="contact${friend.mobileUID}" class="new"  franid="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="#" title="修改姓名"></a></span></li>
+<% /*
+
+ <c:forEach items="${friendList}" var="friend" varStatus="status">
+	    <li id="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="javascript:void(0);" title="修改姓名"></a></span></li>
   </c:forEach>
+*/ %>
+	  <ul id="friendList" class="clearfix">
+     <li id="{id}" mobile="{mobile}" mid="{mobileUID}"><span class="name">{nickname}</span><span class="phone">{mobile}</span><span class="editorname"><a href="javascript:void(0);" title="修改姓名"></a></span></li>
 	  </ul>
 	</div>
 
@@ -94,7 +95,7 @@ var friendList =${friendListJson};
 	</div>
 	<form action="msg/send.json" method="post">
 	<div class="editor_box clearfix">
-	  <input name="friend_id" type="text" />
+	  <input id="editor_sendto" name="friend_id" type="text" autocomplete="off"/>
 	  <textarea rows="" cols="" id="editor" class="" name="text"></textarea>
 	  <div class="op">
 	    <input type="submit" class="btn_send" value="" id="editor_submit" name="button">
@@ -107,24 +108,13 @@ var friendList =${friendListJson};
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery.iprompt.js"></script>
 <script type="text/javascript" src="js/jquery.textbox.js"></script>
+<script type="text/javascript" src="js/jquery.pubsub.js"></script>
 <script type="text/javascript" src="js/formater.js"></script>
 <script type="text/javascript" src="js/jquery.searchlist.js"></script>
 <script type="text/javascript" src="js/jquery.feedlist.js"></script>
 <script type="text/javascript" src="js/m2c.js"></script>
 <script type="text/javascript">
-$(function(){
-	var $feedContainer = $('#feedListContainer');
-	console.log($feedContainer.feedlist('a').show());
-	$('input[type="submit"]').click(function(){
-		var o = {};
-		for(var i in this.form.elements)
-			o[this.form.elements[i].name] = this.form.elements[i].value;
-		$.post(this.form.action,o,function(r){
-			console.log(r);
-		});
-		return false;
-	});
-});
+var friendListData =${friendListJson}; 
 </script>
 </body>
 </html>

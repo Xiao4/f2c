@@ -108,14 +108,15 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .contacts li:hover span.editorname a{width:16px; height:16px; background-position:-50px -260px;display:block; margin-top:2px;}
 
 .mail_box{width:308px;padding-top:39px; border:#dadada solid 1px;background:url(../images/bg_pic-2.jpg) no-repeat top; float:right;}
-.txt_box{height:363px;padding:0 10px;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
-.txt_box .txt{border-width:1px; border-style:solid;padding:5px; position:relative;width:237px;min-height:20px;_height:20px; margin-top:10px; color:#333;}
+.txt_box{height:363px;padding:10px 10px 0;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
+.txt_box .txt{border-width:1px; border-style:solid;padding:5px; position:relative;width:237px;min-height:20px;_height:20px; margin-bottom:10px; color:#333;}
 .txt_box .txt b{font-size:0;line-height:0;width:7px; height:7px; display:block;position:absolute;bottom:4px;}
 .txt_box .in{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:left}
 .txt_box .in b{left:-7px;background-position:-14px -179px;}
 .txt_box .out{border-color:#b5d5b7; background:url(../images/bg_txt_out.png) repeat-x bottom #f4ffeb; float:right}
 .txt_box .out b{right:-7px;background-position:-7px -179px;}
- 
+.txt_box .sending{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:right}
+.txt_box .sending b{right:-7px;background-position:-21px -179px;} 
 .editor_box{padding:10px; background:#f2f2f2;}
 .editor_box textarea{width:276px; height:57px; border:#ccc solid 1px;padding:5px;}
 .editor_box textarea.focus{border:#2276bb solid 1px;}
