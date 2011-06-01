@@ -38,7 +38,7 @@ public class OpenPlatform {
 	private static UTF8PostMethod getPostMethod(String method) {
 		UTF8PostMethod postMethod = new UTF8PostMethod(
 				Setting.OPEN_PLATFORM_HOST + method);
-		postMethod.addParameter("app_key", Setting.APP_KEY);
+		postMethod.addParameter("app_key", Setting.OPEN_PLATFORM_APP_KEY);
 		postMethod.addParameter("timestamp", getTimestamp());
 		return postMethod;
 	}
@@ -46,7 +46,7 @@ public class OpenPlatform {
 	private static UTF8GetMethod getGetMethod(String method) {
 		UTF8GetMethod getMethod = new UTF8GetMethod(Setting.OPEN_PLATFORM_HOST
 				+ method);
-		getMethod.addParameter("app_key", Setting.APP_KEY);
+		getMethod.addParameter("app_key", Setting.OPEN_PLATFORM_APP_KEY);
 		getMethod.addParameter("timestamp", getTimestamp());
 		return getMethod;
 	}
@@ -359,7 +359,7 @@ public class OpenPlatform {
 		// 蔡峰37013942
 		// 崔超33261973
 		//6744852
-		object = directMessagesAdd(6744852, 48173783, "1");
+		object = directMessagesAdd(6744852, 48173783, "中文会乱码吗");
 //		List<String> mobiles = new ArrayList<String>();
 //		mobiles.add("13810138286");
 //		array = invite(48173783, mobiles);

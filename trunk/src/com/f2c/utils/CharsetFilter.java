@@ -10,7 +10,7 @@ import javax.servlet.ServletResponse;
 
 /**
  * 
- * utf-8编码设置过滤器
+ * 编码设置过滤器
  * 
  * @author lihuan
  * 

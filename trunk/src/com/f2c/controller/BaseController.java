@@ -3,11 +3,13 @@ package com.f2c.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.f2c.utils.Setting;
+
 public class BaseController  {
 	private static final long serialVersionUID = 1L;
-	public static final String API_ID = "159159414143696";
-	public static final String API_KEY = "4c1003944dfd093c49ea26c5113fdeb2";
-	public static final String SECRET_KEY = "381b93b117cd27f740962c8ec68d0eb3";
+	public static final String FACEBOOK_API_ID = Setting.FACEBOOK_API_ID;
+	public static final String FACEBOOK_API_KEY = Setting.FACEBOOK_API_KEY;
+	public static final String FACEBOOK_SECRET_KEY = Setting.FACEBOOK_SECRET_KEY;
 	public static Map<String, Object> fbUserMap = new HashMap<String, Object>();
 	
 

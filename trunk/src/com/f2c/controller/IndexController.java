@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ import com.f2c.service.UserService;
  * 
  */
 @Controller
-//@RequestMapping("/")
 public class IndexController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -77,7 +75,6 @@ public class IndexController extends BaseController {
 			logger.debug("当然登录用户:" + JSON.toJSONString(user));
 			List<Friend> friendList =  friendService.getFriendListByUID(user.getId());
 			model.put("friendList", friendList);
-			model.put("friendListJson",JSON.toJSONString(friendList));	
 			logger.debug("当然登录用户的好友列表:" + JSON.toJSONString(friendList));
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());

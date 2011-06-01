@@ -1,6 +1,7 @@
 package com.f2c.utils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +62,7 @@ public class OPHttpClient extends HttpClient {
 				restSig.append("=");
 				restSig.append(postMethod.getParameter(name).getValue());
 			}
-			restSig.append(Setting.SECRET);
+			restSig.append(Setting.OPEN_PLATFORM_SECRET);
 			String md5RestSig = MD5Util.encode32Bits(restSig.toString());
 			postMethod.addParameter("rest_sig", md5RestSig);
 			if (logger.isDebugEnabled()) {
@@ -84,7 +85,7 @@ public class OPHttpClient extends HttpClient {
 				for (String p : paramList) {
 					restSig.append(p);
 				}
-				restSig.append(Setting.SECRET);
+				restSig.append(Setting.OPEN_PLATFORM_SECRET);
 				String md5RestSig = MD5Util.encode32Bits(restSig.toString());
 				getMethod.addParameter("rest_sig", md5RestSig);
 				if (logger.isDebugEnabled()) {

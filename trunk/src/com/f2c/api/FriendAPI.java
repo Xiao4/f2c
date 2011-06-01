@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
 import com.f2c.entity.Friend;
 import com.f2c.entity.User;
 import com.f2c.service.FriendService;
@@ -57,6 +58,7 @@ public class FriendAPI extends BaseAPI {
 		if (nickname == null) {
 			return createResults(ResultsUtil.PARAMETER_NICKNAME_REQUIRE);
 		}
+		logger.debug("添加联系人, user:[{}], mobile:[{}], nickname:[{}]", new Object[]{JSON.toJSONString(user), mobile, nickname});
 		List<Friend> friendList = friendService.getFriendByMobile(user.getId(), mobile);
 		if (friendList != null && friendList.size() > 0) {
 			return createResults(ResultsUtil.FRIEND_ALREAY_EXISTS, friendList.get(0));
@@ -66,7 +68,7 @@ public class FriendAPI extends BaseAPI {
 			OpenPlatform.invite(Integer.valueOf(user.getMobileUID()), mobile);
 			return createResults(ResultsUtil.SUCCESS, friend);
 		} catch (RuntimeException e) {
-			logger.error(e.getMessage());
+			logger.error("添加联系人失败", e);
 			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
 		}
 	}
@@ -89,6 +91,7 @@ public class FriendAPI extends BaseAPI {
 		if (fId == null) {
 			return createResults(ResultsUtil.PARAMETER_FRIENDID_REQUIRE);
 		}
+		logger.debug("删除联系人, user:[{}], friendUID:[{}]", new Object[]{JSON.toJSONString(user), fId});
 		try {
 			boolean success = friendService.deleteByID(fId);
 			if (success) {
@@ -97,7 +100,7 @@ public class FriendAPI extends BaseAPI {
 				return createResults(ResultsUtil.FAILED);
 			}
 		} catch (RuntimeException e) {
-			logger.error(e.getMessage());
+			logger.error("删除联系人失败", e);
 			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
 		}
 	}
@@ -124,6 +127,7 @@ public class FriendAPI extends BaseAPI {
 		}
 		try {
 			Friend friend = this.friendService.getFriendByID(fId);
+			logger.debug("修改联系人信息, user:[{}], friend:[{}]", new Object[]{JSON.toJSONString(user), JSON.toJSONString(friend)});
 			if (friend != null) {
 				friend.setNickname(fName);
 				boolean success = this.friendService.update(friend);
@@ -136,7 +140,7 @@ public class FriendAPI extends BaseAPI {
 				return createResults(ResultsUtil.FAILED);
 			}
 		} catch (RuntimeException e) {
-			logger.error(e.getMessage());
+			logger.error("修改联系人失败", e);
 			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
 		}
 	}

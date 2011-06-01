@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.slf4j.Logger;
@@ -18,8 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UTF8PostMethod extends PostMethod {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(UTF8PostMethod.class);
+	private static Logger logger = LoggerFactory.getLogger(UTF8PostMethod.class);
 
 	public UTF8PostMethod() {
 	}

@@ -37,7 +37,7 @@ public class WelcomeController extends BaseController {
 		try {
 			HttpSession session = request.getSession();
 			String signedRequest = request.getParameter("signed_request");
-			JSONObject fbUserinfo = FacebookUtil.parseSignedRequest(signedRequest, SECRET_KEY);
+			JSONObject fbUserinfo = FacebookUtil.parseSignedRequest(signedRequest, FACEBOOK_SECRET_KEY);
 			session.setAttribute("fb_userinfo", fbUserinfo);
 			if (fbUserinfo != null) {
 				String oauthToken = fbUserinfo.getString("oauth_token");
