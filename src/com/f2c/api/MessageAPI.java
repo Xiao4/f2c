@@ -1,7 +1,8 @@
 package com.f2c.api;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.f2c.entity.Friend;
+import com.f2c.entity.Message;
 import com.f2c.entity.User;
 import com.f2c.service.FriendService;
 import com.f2c.service.UserService;
@@ -50,25 +52,36 @@ public class MessageAPI extends BaseAPI {
 	 */
 	@RequestMapping(value = "/send")
 	public Map<String, Object> add(HttpServletRequest request, HttpServletResponse response){
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
-		String friendID = request.getParameter("friend_id");
-		String text = request.getParameter("text");
-		if (user == null) {
-			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
+		try {
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("loginUser");
+			String friendID = request.getParameter("friend_id");
+			String text = request.getParameter("text");
+			if (user == null) {
+				return createResults(ResultsUtil.USER_LOGIN_FAILURE);
+			}
+			if (friendID == null) {
+				return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
+			}
+			if (text == null) {
+				return createResults(ResultsUtil.PARAMETER_TEXT_REQUIRE);
+			}
+			Friend friend = this.friendService.getFriendByID(friendID);
+			if (logger.isDebugEnabled()) {
+				logger.debug("用户" + JSON.toJSONString(user) + "发送[" + text + "]给联系人" + JSON.toJSONString(friend));
+			}
+			JSONObject returnObject = OpenPlatform.directMessagesAdd(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), text);
+			Message msg = new Message();
+			msg.setCreatTime(returnObject.getString("create_at"));
+			msg.setNickName(returnObject.getJSONObject("user_info").getString("nickname"));
+			msg.setText(returnObject.getString("text"));
+			msg.setUserId(friendID);
+			msg.setType("out");
+			return createResults(ResultsUtil.SUCCESS, msg);
+		} catch (RuntimeException e) {
+			logger.error("发送私聊信息失败,详情:", e);
+			return createResults(ResultsUtil.FAILED, e.getMessage());
 		}
-		if (friendID == null) {
-			return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
-		}
-		if (text == null) {
-			return createResults(ResultsUtil.PARAMETER_TEXT_REQUIRE);
-		}
-		Friend friend = this.friendService.getFriendByID(friendID);
-		if (logger.isDebugEnabled()) {
-			logger.debug("用户" + JSON.toJSONString(user) + "发送[" + text + "]给联系人" + JSON.toJSONString(friend));
-		}
-		JSONObject returnText = OpenPlatform.directMessagesAdd(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), text);
-		return createResults(ResultsUtil.SUCCESS, returnText.toString());
 	}
 	
 	/**
@@ -80,32 +93,49 @@ public class MessageAPI extends BaseAPI {
 	 */
 	@RequestMapping(value = "/history")
 	public Map<String, Object> get(HttpServletRequest request, HttpServletResponse response){
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
-		String friendID = request.getParameter("friend_id");
-		Integer maxId = null;
-		Integer count = 3;
-		if (request.getParameter("max_id") != null) {
-			maxId = Integer.valueOf(request.getParameter("max_id"));
-		}
-		if (request.getParameter("count") != null) {
-			count = Integer.valueOf(request.getParameter("count"));
-		}
-		if (user == null) {
-			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
-		}
-		if (friendID == null) {
-			return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
-		}
-		Friend friend = this.friendService.getFriendByID(friendID);
-		if (logger.isDebugEnabled()) {
-			logger.debug("用户" + JSON.toJSONString(user) + "获取与用户" + JSON.toJSONString(friend) + "的私聊信息" );
-		}
 		try {
-			JSONArray returnArry = OpenPlatform.directMessagesDialog(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), maxId, count);
-			return createResults(ResultsUtil.SUCCESS, returnArry.toString());
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("loginUser");
+			String friendID = request.getParameter("friend_id");
+			Integer maxId = null;
+			Integer count = 3;
+			if (request.getParameter("max_id") != null) {
+				maxId = Integer.valueOf(request.getParameter("max_id"));
+			}
+			if (request.getParameter("count") != null) {
+				count = Integer.valueOf(request.getParameter("count"));
+			}
+			if (user == null) {
+				return createResults(ResultsUtil.USER_LOGIN_FAILURE);
+			}
+			if (friendID == null) {
+				return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
+			}
+			Friend friend = this.friendService.getFriendByID(friendID);
+			if (logger.isDebugEnabled()) {
+				logger.debug("用户" + JSON.toJSONString(user) + "获取与用户" + JSON.toJSONString(friend) + "的私聊信息" );
+			}
+			JSONArray returnArray = OpenPlatform.directMessagesDialog(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), maxId, count);
+			List<Message> msgList = new ArrayList<Message>();
+			for (int i = 0; i < returnArray.size(); i++) {
+				JSONObject returnObject = returnArray.getJSONObject(i);
+				Message msg = new Message();
+				msg.setCreatTime(returnObject.getString("create_at"));
+				JSONObject userInfo = returnObject.getJSONObject("user_info");
+				msg.setNickName(userInfo.getString("nickname"));
+				msg.setText(returnObject.getString("text"));
+				msg.setUserId(friendID);
+				if (userInfo.getString("id") != null && userInfo.getString("id").equals(user.getMobileUID())) {
+					msg.setType("out");
+				} else {
+					msg.setType("in");
+				}
+				msgList.add(msg);
+			}
+			return createResults(ResultsUtil.SUCCESS, msgList);
 		} catch (RuntimeException e) {
-			return createResults(ResultsUtil.FAILED);
+			logger.error("获取私聊信息失败,详情:", e);
+			return createResults(ResultsUtil.FAILED, e.getMessage());
 		}
 	}
 
@@ -118,41 +148,52 @@ public class MessageAPI extends BaseAPI {
 	 */
 	@RequestMapping(value = "/latest")
 	public Map<String, Object> getLatestMessage(HttpServletRequest request, HttpServletResponse response){
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
-		List<Friend> friendList = friendService.getFriendListByUID(user.getId());
-		Map<String, List<Object>> data = new HashMap<String, List<Object>>();
-		int count = OpenPlatform.countDirectMessage(Integer.valueOf(user.getMobileUID()));
-		if (count != 0) {
-			JSONArray jsonArray = OpenPlatform.directMessagesAllDialog(Integer.valueOf(user.getMobileUID()), null, count);
-			List<Object> unknow = new ArrayList<Object>();
-			for (Friend friend : friendList) {
-				List<Object> messages = new ArrayList<Object>();
-				for (int i =0; i < jsonArray.size(); i ++) {
-					JSONObject jsonObject = jsonArray.getJSONObject(i);
-					String message = jsonObject.toString();
-					if (friend.getMobileUID().equals(jsonObject.getString("user_id"))) {
-						messages.add(message);
-						unknow.remove(message);
+		try {
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("loginUser");
+			List<Friend> friendList = friendService.getFriendListByUID(user.getId());
+			List<Message> msgList = new ArrayList<Message>();
+			int count = OpenPlatform.countDirectMessage(Integer.valueOf(user.getMobileUID()));
+			if (count != 0) {
+				JSONArray returnArray = OpenPlatform.directMessagesAllDialog(Integer.valueOf(user.getMobileUID()), null, count);
+				for (int i =0; i < returnArray.size(); i ++) {
+					boolean isUnknow = true;
+					JSONObject returnObject = returnArray.getJSONObject(i);
+					Message msg = new Message();
+					msg.setCreatTime(returnObject.getString("create_at"));
+					JSONObject userInfo = returnObject.getJSONObject("user_info");
+					msg.setNickName(userInfo.getString("nickname"));
+					msg.setText(returnObject.getString("text"));
+					if (userInfo.getString("id") != null && userInfo.getString("id").equals(user.getMobileUID())) {
+						msg.setType("out");
 					} else {
-						if (!unknow.contains(message)) {
-							unknow.add(message);
+						msg.setType("in");
+					}
+					for (Friend friend : friendList) {
+						if (friend.getMobileUID().equals(returnObject.getString("user_id"))) {
+							msg.setUserId(friend.getId());
+							isUnknow = false;
 						}
 					}
+					if(isUnknow) {
+						msg.setUserId("unknow");
+					}
+					msgList.add(msg);
 				}
-				if(messages.size() > 0) {
-					data.put(friend.getUserID(), messages);	
+				if (msgList.size() >0) {
+//					OpenPlatform.clearDirectMessageCount(Integer.valueOf(user.getMobileUID()));
 				}
+				return createResults(ResultsUtil.SUCCESS, msgList);
+			} else {
+				return createResults(ResultsUtil.MESSAGE_HASNO_LATEST);
 			}
-			if (unknow.size() > 0) {
-				data.put("unknow", unknow);
-			}
-			if (data.size() >0) {
-				OpenPlatform.clearDirectMessageCount(Integer.valueOf(user.getMobileUID()));
-			}
-			return createResults(ResultsUtil.SUCCESS, data);
-		} else {
-			return createResults(ResultsUtil.MESSAGE_HASNO_LATEST);
+		} catch (RuntimeException e) {
+			logger.error("获取最新私聊失败,详情:", e);
+			return createResults(ResultsUtil.FAILED, e.getMessage());
 		}
+	}
+	
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		System.out.println(URLDecoder.decode("%E4%B8%AD%E6%96%87", "iso-8859-1"));
 	}
 }

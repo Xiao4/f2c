@@ -1,10 +1,5 @@
 package com.f2c.entity;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.springframework.util.Column;
-import org.springframework.util.Id;
-import org.springframework.util.Table;
 
 /**
  * 
@@ -13,101 +8,67 @@ import org.springframework.util.Table;
  * @author lihuan
  * 
  */
-@Table(name = "T_MESSAGE")
-@XmlRootElement
 public class Message {
 
 	/**
-	 * 主键
+	 * 昵称 发送者的昵称
 	 */
-	private String id;
+	private String nickName;
 	/**
-	 * 发送人的ID
+	 * uuid 永远是别人的id
 	 */
-	private String fromUserID;
-	/**
-	 * 接收人的ID
-	 */
-	private String toUserID;
+	private String userId;
 	/**
 	 * 消息体
 	 */
-	private String description;
+	private String text;
 	/**
 	 * 发送时间
 	 */
-	private String sendTime;
+	private String creatTime;
 	/**
-	 * 消息状态 0：未发送 1：发送成功
+	 * 消息类型 (in | out 自己或别人发的)
 	 */
-	private Integer state;
-	/**
-	 * 发送成功后返回的消息
-	 */
-	private String resault;
+	private String type;
 
-	@Id
-	@Column(name = "ID")
-	public String getId() {
-		return id;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
-	@Column(name = "FROM_USER_ID")
-	public String getFromUserID() {
-		return fromUserID;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setFromUserID(String fromUserID) {
-		this.fromUserID = fromUserID;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
-	@Column(name = "TO_USER_ID")
-	public String getToUserID() {
-		return toUserID;
+	public String getText() {
+		return text;
 	}
 
-	public void setToUserID(String toUserID) {
-		this.toUserID = toUserID;
+	public void setText(String text) {
+		this.text = text;
 	}
 
-	@Column(name = "DESCRIPTION")
-	public String getDescription() {
-		return description;
+	public String getCreatTime() {
+		return creatTime;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setCreatTime(String creatTime) {
+		this.creatTime = creatTime;
 	}
 
-	@Column(name = "SEND_TIME")
-	public String getSendTime() {
-		return sendTime;
+	public String getType() {
+		return type;
 	}
 
-	public void setSendTime(String sendTime) {
-		this.sendTime = sendTime;
-	}
-
-	@Column(name = "STATE")
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-
-	@Column(name = "RESAULT")
-	public String getResault() {
-		return resault;
-	}
-
-	public void setResault(String resault) {
-		this.resault = resault;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

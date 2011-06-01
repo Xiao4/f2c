@@ -1,11 +1,21 @@
 package com.f2c.utils;
 
+import java.util.ResourceBundle;
+
 public class Setting {
 
-	public static final String BASE_CHANNEL = "1065810397";
-	public static final String OPEN_PLATFORM_HOST = "http://talkapi.shequ.10086.cn";
-	public static final String APP_KEY = "0471337594a11f72ed18ad0167b6ab54";
-	public static final String SECRET = "b36a3cc9ef9804fd9fe7d7942aef3082";
-	public static final String NAME = "F2C";
+	public static final String BASE_CHANNEL = getResourceString("BASE_CHANNEL");
+	public static final String OPEN_PLATFORM_HOST = getResourceString("OPEN_PLATFORM_HOST");
+	public static final String OPEN_PLATFORM_APP_KEY = getResourceString("OPEN_PLATFORM_APP_KEY");
+	public static final String OPEN_PLATFORM_SECRET = getResourceString("OPEN_PLATFORM_SECRET");
+	public static final String OPEN_PLATFORM_NAME = getResourceString("OPEN_PLATFORM_NAME");
+	public static final String FACEBOOK_API_ID = getResourceString("FACEBOOK_API_ID");
+	public static final String FACEBOOK_API_KEY = getResourceString("FACEBOOK_API_KEY");
+	public static final String FACEBOOK_SECRET_KEY = getResourceString("FACEBOOK_SECRET_KEY");
+
+	private static String getResourceString(String key){
+		ResourceBundle bundle = ResourceBundle.getBundle("setting");
+		return bundle.getString(key);
+	}
 
 }
