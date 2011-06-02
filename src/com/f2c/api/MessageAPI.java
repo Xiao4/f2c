@@ -73,7 +73,7 @@ public class MessageAPI extends BaseAPI {
 			JSONObject returnObject = OpenPlatform.directMessagesAdd(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), text);
 			Message msg = new Message();
 			msg.setCreatTime(returnObject.getString("create_at"));
-			msg.setNickName(returnObject.getJSONObject("user_info").getString("nickname"));
+			msg.setNickName(user.getNickname());
 			msg.setText(returnObject.getString("text"));
 			msg.setUserId(friendID);
 			msg.setType("out");
@@ -181,12 +181,10 @@ public class MessageAPI extends BaseAPI {
 					msgList.add(msg);
 				}
 				if (msgList.size() >0) {
-//					OpenPlatform.clearDirectMessageCount(Integer.valueOf(user.getMobileUID()));
+					OpenPlatform.clearDirectMessageCount(Integer.valueOf(user.getMobileUID()));
 				}
-				return createResults(ResultsUtil.SUCCESS, msgList);
-			} else {
-				return createResults(ResultsUtil.MESSAGE_HASNO_LATEST);
 			}
+			return createResults(ResultsUtil.SUCCESS, msgList);
 		} catch (RuntimeException e) {
 			logger.error("获取最新私聊失败,详情:", e);
 			return createResults(ResultsUtil.FAILED, e.getMessage());
