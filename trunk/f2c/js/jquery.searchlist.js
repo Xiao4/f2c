@@ -37,8 +37,23 @@
 					delete cache[item.id];
 				});
 			}
-			function __search(e,key){
+			function __search(key){
+				var $list = $(this).children();
 				
+				if(key){
+					var regex = eval("\/[^\\t\\n]+\\t.*"+key+".*/gi");
+					var i= 0;
+					var matchlist = cacheList.join("\n").match(regex);
+					$list.hide();
+					if(matchlist){
+					    $(matchlist).each(function(){
+					        var id = this.split("\t")[0];
+					        $list.filter("#"+id).show();
+					    });
+					}
+				}else{
+					$list.show();
+				}
 			}
 			function __user(key){
 				return contacts[key];
