@@ -4,6 +4,7 @@ $(function(){
 	$limit=$('#editor_limit'),
 	$btnSubmit=$('#editor_submit'),
 	$sendTo=$('#editor_sendto'),
+	$sendToNickname=$('.sendto_nickname'),
 	$friendList=$('#friendList')
 	$feedContainer = $('#feedListContainer');
 function __sevs(name){
@@ -129,6 +130,7 @@ function __getFormData(form){
 		$feedContainer.feedlist(fid).swich();
 		$('.mail_box').css('visibility','visible');
 		$sendTo.val(fid);
+		$sendToNickname.html($searchList.user(fid).nickname);
 	}
 
 // Msg ------------------------------------------------
@@ -167,6 +169,7 @@ $.extend(Msg.prototype,{
 });
 var __historyCount=3;
 function __history(target){
+return;
 	var fid=$(target.parentNode).attr('rel')
 	var $t=$(target).css('visibility','hidden');
 	var $p=$t.parent();

@@ -97,6 +97,7 @@
 	</div>
 	<form id="editor_form" action="msg/send.json" method="post">
 	<div class="editor_box clearfix">
+		<h3>To: <span class="sendto_nickname"></span></h3>
 	  <input id="editor_sendto" name="friend_id" type="hidden" autocomplete="off"/>
 	  <textarea rows="" cols="" id="editor" class="" name="text" resizable="false"></textarea>
 	  <div class="op">
