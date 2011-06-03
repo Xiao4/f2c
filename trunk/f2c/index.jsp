@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -43,14 +45,11 @@
 	   <p><a id="sevs_signature" href="javascript:void(0);"><span class="sign"></span>signature</a></p>
      </div>
      <div class="invite">
-	   <a href="#"></a>
+	   <a href="#" id="invite"></a>
 	 </div>
-	 <div class="embed_box"></div>
-     
-
+	<iframe id="fblikebox"  src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D159159414143696&amp;width=185&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=true&amp;height=350" scrolling="no" frameborder="0" style="border:none; overflow:hidden;width:185px;height:350px;margin-top:17px; " allowTransparency="true"></iframe>
   </div>
-
-  <div class="contacts home clearfix">
+	<div class="contacts home clearfix">
     <div class="hd clearfix">
 	  <h2>Contacts</h2>
 	  <a id="contacts_add" href="javascript:void(0)" class="add"></a>
@@ -147,5 +146,28 @@ var ME={
         mobileUID:'${loginUser.mobileUID}'
 }
 </script>
+<div id="fb-root"></div>
+<script type="text/javascript">
+window.fbAsyncInit = function() {
+	FB.init({
+	    appId  : '228536963826365',
+	    status : true, // check login status
+	    cookie : true, // enable cookies to allow the server to access the session
+		xfbml  : false  // parse XFBML
+	});
+	$('#invite').click(function(){
+		console.log(1);
+		FB.ui({
+				method: 'apprequests',
+				message: 'Thanks to M2you, now I can send and receive free SMS directly from Facebook to China! Thought I would invite you to give it a try.',
+				data: 'lb'
+			});
+		return false;
+	});
+	console.log(2);
+};
+</script>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+
 </body>
 </html>

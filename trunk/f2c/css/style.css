@@ -72,7 +72,7 @@ a.a_send{width:174px; height:35px; background-position:0 -211px; display:block; 
 
 /* contacts */
 .f10{font-size:10px;}
-.user_box{width:180px; float:left;margin-right:10px; display:inline;}
+.user_box{width:185px; float:left;padding-right:5px;display:inline;}
 .namebox{margin-bottom:10px;}
 .namebox img{width:50px; height:50px; float:left; display:inline;}
 .namebox .txt{margin-left:55px;padding-top:6px;}
@@ -149,3 +149,4 @@ span.sign{background-position:-32px -260px;}
 .btn_add,.btn_cancel{width:60px; height:24px; display:inline-block;}
 .btn_add{background-position:-95px -144px; margin:0 5px 0 30px;}
 .btn_cancel{background-position:-54px -103px;}
+

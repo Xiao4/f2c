@@ -36,7 +36,7 @@ function shownext(){
         <div class="thankbox clearfix">
             <p class="title"><img src="images/test_tx.jpg" align="absmiddle" />HI,azhou, thank you for...</p>
             <p>We palalalalala ...The  SMS channel number you gotten is:</p>
-            <p class="f20">1065 8103 9712 345678</p>
+            <p class="f20">1065 8103 97${loginUser.mobileUID}</p>
             <p class="gray">Later, you can tell your chinese friends the number.</p>
 			<p><a href="index.action" class="a_send"></a></p>
         </div>
