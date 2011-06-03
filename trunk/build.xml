@@ -6,14 +6,16 @@
 	<property name="website" value="f2c" />
 	<property name="build" value="${website}/WEB-INF/classes" />
 	<property name="dist" value="dist" />
-
+	<property name="tomcatlib" value="${LANG}/lib/" />
 	<path id="project.class.path">
 		<pathelement location="./lib/" />
 		<pathelement path="${java.class.path}/" />
 		<pathelement path="${additional.path}" />
+		<pathelement path="${tomcatlib}" />
 	</path>
 	<target name="init">
 		<!-- Create the time stamp -->
+		<echo> ${java.class.path}</echo>
 		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build}" />
@@ -27,7 +29,7 @@
 		</copy>
 
 		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+		<javac encoding="utf-8"  srcdir="${src}" destdir="${build}" includeantruntime="false">
 
 			<classpath>
 				<pathelement path="${basedir}" />
