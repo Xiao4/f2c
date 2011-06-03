@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
 import com.f2c.entity.User;
 import com.f2c.service.UserService;
 import com.f2c.utils.ResultsUtil;
@@ -87,6 +88,8 @@ public class UserAPI extends BaseAPI {
 		String facebookUID = session.getAttribute("facebook_uid").toString();
 		try {
 			User user = userService.register(facebookUID);
+			session.setAttribute("loginUser", user);
+			session.setAttribute("loginUserJson", JSON.toJSONString(user));
 			return createResults(ResultsUtil.SUCCESS, user);
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());

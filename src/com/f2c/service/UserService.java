@@ -3,6 +3,8 @@ package com.f2c.service;
 import java.util.List;
 import java.util.UUID;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.f2c.dao.UserDAO;
 import com.f2c.entity.User;
+import com.f2c.utils.FaceBook;
 
 @Service
 public class UserService extends BaseService {
@@ -46,7 +49,7 @@ public class UserService extends BaseService {
 	 * @return
 	 */
 	public User register(String facebookUID) {
-		if (!isEmpty(facebookUID)) {
+		if (isEmpty(facebookUID)) {
 			logger.debug("FacebookUID不能为空");
 			return null;
 		}
@@ -62,9 +65,9 @@ public class UserService extends BaseService {
 		user.setId(UUID.randomUUID().toString());
 		user.setMobileUID(mobileUID);
 		user.setFacebookUID(facebookUID);
-//		JSONObject jsonUser = FaceBook.getUserInfo(Integer.valueOf(facebookUID));
-//		user.setNickname(jsonUser.getString("name"));
-		user.setNickname("test");
+		JSONObject returnObject = FaceBook.getUserInfo(Integer.valueOf(facebookUID));
+		String facebookName = returnObject.getString("name");
+		user.setNickname(facebookName);
 		if (logger.isDebugEnabled()) {
 			logger.debug("插入用户数据：" + JSON.toJSONString(user));
 		}

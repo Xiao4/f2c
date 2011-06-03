@@ -12,6 +12,8 @@ public class Setting {
 	public static final String FACEBOOK_API_ID = getResourceString("FACEBOOK_API_ID");
 	public static final String FACEBOOK_API_KEY = getResourceString("FACEBOOK_API_KEY");
 	public static final String FACEBOOK_SECRET_KEY = getResourceString("FACEBOOK_SECRET_KEY");
+	public static final String FACEBOOK_APP_URL = getResourceString("FACEBOOK_APP_URL");
+	
 
 	private static String getResourceString(String key){
 		ResourceBundle bundle = ResourceBundle.getBundle("setting");
