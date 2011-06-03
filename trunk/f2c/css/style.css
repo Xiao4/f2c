@@ -12,6 +12,8 @@ ul li{list-style-image: none;list-style-position: outside;list-style-type: none;
 caption, th{text-align: left;}
 h1, h2, h3, h4, h5, h6{font-size: 100%;font-weight: normal;vertical-align: baseline;zoom: 1;}
 input, textarea, select, button{font-family: Verdana;font-size: 12px;font-weight: inherit; vertical-align:middle}
+button{border: medium none;}
+textarea{ resize:none } 
 input[type=radio], input[type=checkbox]{vertical-align: middle;}
 /*base*/
 a{text-decoration:none;}
@@ -47,9 +49,9 @@ label.checkbox, label.radio, label.text{padding-left: 4px;vertical-align: top;}
 .bold{font-weight:bold;}
 .position{position:relative;}
 /*structure*/
-.b-star,.like,.f,.invite a,a.add,.search input.search_btn,.contacts li span.remove a,.txt_box .txt b,.btn_send,.btn_ok,a.a_send,span.icon_m2you,span.add,span.sign,.contacts li span.editorname a,a.btn_add,a.btn_cancel{background:url(../images/img_bg.png) no-repeat;}
+.b-star,.like,.f,.invite a,a.add,.search input.search_btn,.contacts li span.remove a,.txt_box .txt b,.btn_send,.btn_ok,a.a_send,span.icon_m2you,span.add,span.sign,.contacts li span.editorname a,.btn_add,.btn_cancel{background:url(../images/img_bg.png) no-repeat;}
 
-#maincolumn{width:760px; margin:0 auto;}
+#maincolumn{width:760px;height:536px; margin:0 auto;}
 .m2you{height:101px; background:url(../images/bg_pic.jpg) no-repeat;}
 .starbox{border:1px solid #d6d6d6; zoom:1; background:url(../images/star_bg.gif) repeat-x left bottom;margin-top:15px;}
 .starbox .cm{height:269px; background:url(../images/banner.jpg) no-repeat;}
@@ -105,10 +107,11 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 
 .contacts li:hover, .contacts li.current{background:#d8dfea}
 .contacts li.new{background:#FFECBF}
-.contacts li:hover span.editorname a{width:16px; height:16px; background-position:-50px -260px;display:block; margin-top:2px;}
+.contacts li:hover span.editorname a, .contacts li.editing span.editorname a{width:16px; height:16px; background-position:-50px -260px;display:block; margin-top:2px;}
 
+#feedListContainer{height:365px}
 .mail_box{width:308px;padding-top:39px; border:#dadada solid 1px;background:url(../images/bg_pic-2.jpg) no-repeat top; float:right;}
-.txt_box{height:363px;padding:10px 10px 0;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
+.txt_box{height:353px;padding:10px 10px 0;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
 .txt_box .txt{border-width:1px; border-style:solid;padding:5px; position:relative;width:237px;min-height:20px;_height:20px; margin-bottom:10px; color:#333;}
 .txt_box .txt b{font-size:0;line-height:0;width:7px; height:7px; display:block;position:absolute;bottom:4px;}
 .txt_box .in{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:left}
@@ -117,6 +120,8 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .txt_box .out b{right:-7px;background-position:-7px -179px;}
 .txt_box .sending{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:right}
 .txt_box .sending b{right:-7px;background-position:-21px -179px;} 
+.txt_box .history{color:#AAA;text-align:center;padding-top:10px;border-bottom:1px solid #ddd;margin-bottom:10px;cursor:pointer}
+.txt_box .history:hover {color:#333;}
 .editor_box{padding:10px; background:#f2f2f2;}
 .editor_box textarea{width:276px; height:57px; border:#ccc solid 1px;padding:5px;}
 .editor_box textarea.focus{border:#2276bb solid 1px;}
@@ -141,6 +146,6 @@ span.sign{background-position:-32px -260px;}
 .layer_add input.i-n{width:172px; padding:4px; border:#ccc solid 1px;}
 .layer_add h2{margin-bottom:5px;font-weight:bold;}
 .layer_add p{margin-bottom:10px;}
-a.btn_add,a.btn_cancel{width:60px; height:24px; display:inline-block;}
-a.btn_add{background-position:-95px -144px; margin:0 5px 0 30px;}
-a.btn_cancel{background-position:-54px -103px;}
+.btn_add,.btn_cancel{width:60px; height:24px; display:inline-block;}
+.btn_add{background-position:-95px -144px; margin:0 5px 0 30px;}
+.btn_cancel{background-position:-54px -103px;}
