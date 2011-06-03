@@ -17,23 +17,24 @@
 				return $(html).prependTo(this);
 			}
 			function __update(item){
-				var html='' ,collection = [];
+				var html='' ,collection = [],self = this;
 				$(item).each(function(index,item){
 					html=template.exec(item);
 					var tmp = item.id + '\t'+ item.mobile+ '\t'+ item.nickname;
 					var index = cache[item.id];
 					contacts[item.id] = item;
-					if(isNaN(index)) __create.call(this,null,item);
+					if(isNaN(index)) __create.call(self,null,item);
 					else{
 						cacheList[index] = tmp;
 					}
-					collection.push($('#'+item.id,this).replaceWith(html));
+					collection.push($('#'+item.id,self).replaceWith(html));
 				});
 				return $(collection);
 			}
 			function __delete(item){
+				var self = this;
 				$(item).each(function(index,item){
-					$('#'+item.id,this).remove();
+					$('#'+item.id,self).remove();
 					delete cache[item.id];
 				});
 			}

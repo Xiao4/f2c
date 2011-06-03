@@ -10,6 +10,15 @@ function __sevs(name){
 	$('div.home,div.signature').hide();
 	$('div.'+name).show();
 }
+function __getFormData(form){
+	var o={};
+	if(!form&&form.elements)return o;
+	for(var i in form.elements){
+		if(form.elements[i]&&form.elements[i].name)
+			o[form.elements[i].name] = form.elements[i].value;
+	}
+	return o;
+}
 // home ------------------------------------------------
 	$('#sevs_home').click(function(){
 		__sevs('home');
@@ -26,9 +35,7 @@ function __sevs(name){
                 $btnSubmit.attr('disabled',false);
 	}
 	$editorForm.submit(function(){
-		var o = {};
-		for(var i in this.elements)
-			o[this.elements[i].name] = this.elements[i].value;
+		var o = __getFormData(this);
 
 		if(!o.text||!o.friend_id)return false;
 		var myMsg=new Msg({
@@ -50,6 +57,7 @@ function __sevs(name){
 			}
 			$editor.val('');
 			myMsg.ele.removeClass('sending').addClass('out').attr('feedid',r.data.feedId);
+			delete myMsg;
 		});
 		return false;
 	});
@@ -105,7 +113,6 @@ function __sevs(name){
 		}
 	});
 	function __editFriend(fid){
-		console.log('e'+fid);
 		__getAddForm({
 			action:'update',
 			target:null,
@@ -166,11 +173,12 @@ function __history(target){
 	$.post('msg/history.json',{
 			'count':__historyCount,
 			'friend_id':fid,
-			'max_id':$p.find('.txt:first').attr('feedid')||''
+			'since_id':$p.find('.txt:first').attr('feedid')||''
 		},function(r){
 			if(r.data&&r.data.length){
-				for(var i=0;i<__historyCount&&i<r.data.length;i++){
-					var myMsg=new Msg(r.data[i]);
+				var msgs=r.data;//.reverse();
+				for(var i in msgs){
+					var myMsg=new Msg(msgs[i]);
 					myMsg.render('prev');
 					delete myMsg;
 				}
@@ -198,12 +206,9 @@ $feedContainer.click(function(e){
 	});
 
 	var $signatureForm = $('#signature_form').submit(function(){
-		var o = {};
-		for(var i in this.elements)
-			o[this.elements[i].name] = this.elements[i].value;
+		var o = __getFormData(this);
 		if(!o.nickname)return false;
 		$.post(this.action,o,function(r){
-			console.log(r);
 			if(r.code==0){
 				ME=r.data;
 				$('.nickname').html(ME.nickname)
@@ -225,6 +230,7 @@ $feedContainer.click(function(e){
 			var myMsg=new Msg(msgs[key]);
 			myMsg.render();
 			$searchList.find('#'+myMsg.userId).addClass('new').prependTo($searchList);
+			delete myMsg;
 		}
 	}
 // add friend ------------------------------------------------
@@ -248,9 +254,6 @@ $('#contacts_add').click(function(){
 });
 function __getAddForm(option){
 	var option=$.extend({
-		onLoad:function(){
-			console.log('hi');
-		},
 		mask:false,
 		noArrow:false,
 		preButtons:false	
@@ -265,11 +268,8 @@ function __getAddForm(option){
 		+(option.action=='add'?'<h2>china mobile number</h2><p><input name="mobile" class="i-n" type="text" /></p>':'<input type="hidden" name="f_id" value="'+option.fid+'"/>')
 		+'<p><button class="btn_add" type="submit"></button><button class="btn_cancel" type="reset"></button></p></div></form>',option);
 	$box.find('form').submit(function(){
-			var o = {};
-			for(var i in this.elements)
-				o[this.elements[i].name] = this.elements[i].value;
+			var o = __getFormData(this);
 			$.post(this.action,o,function(r){
-				console.log(r);
 				if(r.code==0){
 					$searchList[(option.action=="add"?'create':'update')](r.data);
 					$.UI.hide();
