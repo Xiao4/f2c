@@ -148,7 +148,8 @@ public class MessageAPI extends BaseAPI {
 				}
 				msgList.add(msg);
 			}
-			return createResults(ResultsUtil.SUCCESS, msgList);
+//			return createResults(ResultsUtil.SUCCESS, msgList);
+			return createResults(ResultsUtil.SUCCESS, new ArrayList<Message>());
 		} catch (RuntimeException e) {
 			logger.error("获取私聊信息失败,详情:", e);
 			return createResults(ResultsUtil.FAILED, e.getMessage());
