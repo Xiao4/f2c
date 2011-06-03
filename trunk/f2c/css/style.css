@@ -72,7 +72,7 @@ a.a_send{width:174px; height:35px; background-position:0 -211px; display:block; 
 
 /* contacts */
 .f10{font-size:10px;}
-.user_box{width:185px; float:left;padding-right:5px;display:inline;}
+.user_box{width:185px; float:left;padding-right:8px;display:inline;}
 .namebox{margin-bottom:10px;}
 .namebox img{width:50px; height:50px; float:left; display:inline;}
 .namebox .txt{margin-left:55px;padding-top:6px;}
@@ -109,9 +109,9 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .contacts li.new{background:#FFECBF}
 .contacts li:hover span.editorname a, .contacts li.editing span.editorname a{width:16px; height:16px; background-position:-50px -260px;display:block; margin-top:2px;}
 
-#feedListContainer{height:365px}
+#feedListContainer{height:345px}
 .mail_box{width:308px;padding-top:39px; border:#dadada solid 1px;background:url(../images/bg_pic-2.jpg) no-repeat top; float:right;}
-.txt_box{height:353px;padding:10px 10px 0;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
+.txt_box{height:333px;padding:10px 10px 0;background:#fff;border-top:#ccc solid 1px;border-bottom:#ccc solid 1px;position:relative;overflow-y:scroll;}
 .txt_box .txt{border-width:1px; border-style:solid;padding:5px; position:relative;width:237px;min-height:20px;_height:20px; margin-bottom:10px; color:#333;}
 .txt_box .txt b{font-size:0;line-height:0;width:7px; height:7px; display:block;position:absolute;bottom:4px;}
 .txt_box .in{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:left}
@@ -120,7 +120,7 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .txt_box .out b{right:-7px;background-position:-7px -179px;}
 .txt_box .sending{border-color:#ddbc92;background:url(../images/bg_txt_sending.png) repeat-x bottom #fff8eb; float:right}
 .txt_box .sending b{right:-7px;background-position:-21px -179px;} 
-.txt_box .history{color:#AAA;text-align:center;padding-top:10px;border-bottom:1px solid #ddd;margin-bottom:10px;cursor:pointer}
+.txt_box .history{display:none;color:#AAA;text-align:center;padding-top:10px;border-bottom:1px solid #ddd;margin-bottom:10px;cursor:pointer}
 .txt_box .history:hover {color:#333;}
 .editor_box{padding:10px; background:#f2f2f2;}
 .editor_box textarea{width:276px; height:57px; border:#ccc solid 1px;padding:5px;}
@@ -128,6 +128,8 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .editor_box .op{margin-top:5px;height:35px;}
 .editor_box .op .btn_send{width:92px; height:35px; background-position:0 -144px; border:0; float:right;cursor:pointer;}
 .editor_box .op p{float:right;padding-right:10px; color:#369;line-height:35px;font-weight:bold;}
+.editor_box h3{line-height:20px;color:#AAA}
+.editor_box h3 span{color:#333}
 
 .signature{width:274px;padding:10px 2px; float:left;}
 .signature h2{font-size:18px; line-height:22px;}
