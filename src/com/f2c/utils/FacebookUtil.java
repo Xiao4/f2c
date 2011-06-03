@@ -44,7 +44,7 @@ public class FacebookUtil {
             
             try {
                 logger.debug("encodedSig={}", encodedSig);
-                JSONObject data = JSONObject.fromObject(fbDecodeBase64(payload));
+                JSONObject data = JSONObject.fromObject(new String(fbDecodeBase64(payload)));
                 if (!"HMAC-SHA256".equalsIgnoreCase(data.getString("algorithm"))) {
                     logger.error("Unknown algorithm. Expected HMAC-SHA256, signedRequest={}", signedRequest);
                     return null;

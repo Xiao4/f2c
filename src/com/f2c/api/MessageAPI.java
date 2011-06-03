@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ import com.f2c.entity.Friend;
 import com.f2c.entity.Message;
 import com.f2c.entity.User;
 import com.f2c.service.FriendService;
+import com.f2c.service.MessageService;
 import com.f2c.service.UserService;
+import com.f2c.utils.DateUtils;
 import com.f2c.utils.OpenPlatform;
 import com.f2c.utils.ResultsUtil;
 
@@ -60,10 +63,10 @@ public class MessageAPI extends BaseAPI {
 			if (user == null) {
 				return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 			}
-			if (friendID == null) {
+			if (StringUtils.isEmpty(friendID)) {
 				return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
 			}
-			if (text == null) {
+			if (StringUtils.isEmpty(text)) {
 				return createResults(ResultsUtil.PARAMETER_TEXT_REQUIRE);
 			}
 			Friend friend = this.friendService.getFriendByID(friendID);
@@ -72,9 +75,10 @@ public class MessageAPI extends BaseAPI {
 			}
 			JSONObject returnObject = OpenPlatform.directMessagesAdd(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), text);
 			Message msg = new Message();
-			msg.setCreatTime(returnObject.getString("create_at"));
+			msg.setCreatTime(DateUtils.parseTo(returnObject.getString("create_at")));
 			msg.setNickName(user.getNickname());
 			msg.setText(returnObject.getString("text"));
+			msg.setFeedId(returnObject.getInt("id"));
 			msg.setUserId(friendID);
 			msg.setType("out");
 			return createResults(ResultsUtil.SUCCESS, msg);
@@ -97,33 +101,45 @@ public class MessageAPI extends BaseAPI {
 			HttpSession session = request.getSession();
 			User user = (User) session.getAttribute("loginUser");
 			String friendID = request.getParameter("friend_id");
-			Integer maxId = null;
+			Integer sinceId = null;
 			Integer count = 3;
-			if (request.getParameter("max_id") != null) {
-				maxId = Integer.valueOf(request.getParameter("max_id"));
+			if (StringUtils.isNotEmpty(request.getParameter("since_id"))) {
+				sinceId = Integer.valueOf(request.getParameter("since_id"));
 			}
-			if (request.getParameter("count") != null) {
+			if (StringUtils.isNotEmpty(request.getParameter("count"))) {
 				count = Integer.valueOf(request.getParameter("count"));
 			}
 			if (user == null) {
 				return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 			}
-			if (friendID == null) {
+			if (StringUtils.isEmpty(friendID)) {
 				return createResults(ResultsUtil.PARAMETER_FRIENDUID_REQUIRE);
+			}
+			List<Message> msgList = new ArrayList<Message>();
+			if ("0000000000000000".equals(friendID)) {
+				//处理系统消息
+				List<Message> sysMessageList = MessageService.messages.get(user.getId());
+				if (sysMessageList != null) {
+					for (Message msg : sysMessageList) {
+						msgList.add(msg);
+					}
+				}
+				return createResults(ResultsUtil.SUCCESS, msgList);
 			}
 			Friend friend = this.friendService.getFriendByID(friendID);
 			if (logger.isDebugEnabled()) {
 				logger.debug("用户" + JSON.toJSONString(user) + "获取与用户" + JSON.toJSONString(friend) + "的私聊信息" );
 			}
-			JSONArray returnArray = OpenPlatform.directMessagesDialog(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), maxId, count);
-			List<Message> msgList = new ArrayList<Message>();
+			JSONArray returnArray = OpenPlatform.directMessagesDialog(Integer.valueOf(user.getMobileUID()), Integer.valueOf(friend.getMobileUID()), sinceId, count);
+
 			for (int i = 0; i < returnArray.size(); i++) {
 				JSONObject returnObject = returnArray.getJSONObject(i);
 				Message msg = new Message();
-				msg.setCreatTime(returnObject.getString("create_at"));
+				msg.setCreatTime(DateUtils.parseTo(returnObject.getString("create_at")));
 				JSONObject userInfo = returnObject.getJSONObject("user_info");
 				msg.setNickName(userInfo.getString("nickname"));
 				msg.setText(returnObject.getString("text"));
+				msg.setFeedId(returnObject.getInt("id"));
 				msg.setUserId(friendID);
 				if (userInfo.getString("id") != null && userInfo.getString("id").equals(user.getMobileUID())) {
 					msg.setType("out");
@@ -153,6 +169,14 @@ public class MessageAPI extends BaseAPI {
 			User user = (User) session.getAttribute("loginUser");
 			List<Friend> friendList = friendService.getFriendListByUID(user.getId());
 			List<Message> msgList = new ArrayList<Message>();
+			//处理系统消息
+			List<Message> sysMessageList = MessageService.messages.get(user.getId());
+			if (sysMessageList != null) {
+				for (Message msg : sysMessageList) {
+					msg.setViewed(true);
+					msgList.add(msg);
+				}
+			}
 			int count = OpenPlatform.countDirectMessage(Integer.valueOf(user.getMobileUID()));
 			if (count != 0) {
 				JSONArray returnArray = OpenPlatform.directMessagesAllDialog(Integer.valueOf(user.getMobileUID()), null, count);
@@ -160,10 +184,11 @@ public class MessageAPI extends BaseAPI {
 					boolean isUnknow = true;
 					JSONObject returnObject = returnArray.getJSONObject(i);
 					Message msg = new Message();
-					msg.setCreatTime(returnObject.getString("create_at"));
+					msg.setCreatTime(DateUtils.parseTo(returnObject.getString("create_at")));
 					JSONObject userInfo = returnObject.getJSONObject("user_info");
 					msg.setNickName(userInfo.getString("nickname"));
 					msg.setText(returnObject.getString("text"));
+					msg.setFeedId(returnObject.getInt("id"));
 					if (userInfo.getString("id") != null && userInfo.getString("id").equals(user.getMobileUID())) {
 						msg.setType("out");
 					} else {

@@ -30,6 +30,14 @@ public class Message {
 	 * 消息类型 (in | out 自己或别人发的)
 	 */
 	private String type;
+	/**
+	 * feedId
+	 */
+	private int feedId;
+	/**
+	 * 如果是系统消息,用来标识是否已经读取,说客来的消息无视此属性
+	 */
+	private boolean viewed = false;
 
 	public String getNickName() {
 		return nickName;
@@ -69,6 +77,22 @@ public class Message {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public int getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(int feedId) {
+		this.feedId = feedId;
+	}
+
+	public boolean getViewed() {
+		return viewed;
+	}
+
+	public void setViewed(boolean viewed) {
+		this.viewed = viewed;
 	}
 
 }
