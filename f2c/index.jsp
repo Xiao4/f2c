@@ -151,13 +151,12 @@ var ME={
 <script type="text/javascript">
 window.fbAsyncInit = function() {
 	FB.init({
-	    appId  : '228536963826365',
+	    appId  : '${facebook_api_id}',
 	    status : true, // check login status
 	    cookie : true, // enable cookies to allow the server to access the session
 		xfbml  : false  // parse XFBML
 	});
 	$('#invite').click(function(){
-		console.log(1);
 		FB.ui({
 				method: 'apprequests',
 				message: 'Thanks to M2you, now I can send and receive free SMS directly from Facebook to China! Thought I would invite you to give it a try.',
@@ -165,7 +164,6 @@ window.fbAsyncInit = function() {
 			});
 		return false;
 	});
-	console.log(2);
 };
 </script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>

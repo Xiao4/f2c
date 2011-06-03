@@ -6,10 +6,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Welcome </title>
 <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
 function shownext(){
-	document.getElementById("step1").style.display = 'none';
-	document.getElementById("step2").style.display = '';
+	$.getJSON('u/register.json',function(r){
+		if(r.code == 0){
+			var str = '1065810397'+r.data.mobileUID;
+			var temp = "";
+			for(var i in str){
+				if(i%4==0) temp +=" "	
+				temp += str[i];
+			}
+			$('#step2 .f20').html($.trim(temp));
+			$('#step1').hide().next().show();
+		}else{
+			alert(r.msg);
+			location.reload();
+		}
+	});
 }
 </script>
 </head>
