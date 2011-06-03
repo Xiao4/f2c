@@ -18,11 +18,25 @@ import com.f2c.utils.OpenPlatform;
 public class FriendService extends BaseService {
 
 	private static Logger logger = LoggerFactory.getLogger(FriendService.class);
-	
+
 	@Autowired
 	private MobileUserService mobileUserService;
 	@Autowired
+	private MessageService messageService;
+	@Autowired
 	private FriendDAO friendDAO;
+
+	/**
+	 * 获取机器人
+	 * @return
+	 */
+	public Friend getRobot() {
+		Friend friend = new Friend();
+		friend.setId("0000000000000000");
+		friend.setNickname("F2C");
+		friend.setState(1);
+		return friend;
+	}
 	
 	/**
 	 * 根据手机登录用户、手机号码,给登录用户添加好友
@@ -78,6 +92,8 @@ public class FriendService extends BaseService {
 			friend.setNickname(nickname);
 			friend.setMobileUID(friendUID);
 			this.friendDAO.add(friend);
+			messageService.pushRobotMessage(user.getId(), MessageService.content.get(1).replace("{0}", friend.getNickname()));
+			
 			return friend;
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());
@@ -100,7 +116,9 @@ public class FriendService extends BaseService {
 	 * @return
 	 */
 	public List<Friend> getFriendListByUID(String userID){
-		return this.friendDAO.queryFriendByUID(userID);
+		List<Friend> friendList = this.friendDAO.queryFriendByUID(userID);
+		friendList.add(0, getRobot());
+		return friendList;
 	}
 	
 	/**

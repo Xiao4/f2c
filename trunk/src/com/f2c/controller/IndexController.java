@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.f2c.entity.Friend;
+import com.f2c.entity.Message;
 import com.f2c.entity.User;
 import com.f2c.service.FriendService;
+import com.f2c.service.MessageService;
 import com.f2c.service.UserService;
+import com.f2c.utils.FacebookUtil;
 
 /**
  * 
@@ -40,6 +44,8 @@ public class IndexController extends BaseController {
 	private UserService userService;
 	@Autowired
 	private FriendService friendService;
+	@Autowired
+	private MessageService messageService;
 
 
 	/**
@@ -56,26 +62,49 @@ public class IndexController extends BaseController {
 		try {
 			HttpSession session = request.getSession();
 			User user = null;
-			if (session.getAttribute("fb_userinfo") != null) {
-				JSONObject fbUserinfo = (JSONObject) session.getAttribute("fb_userinfo");
-				String facebookUID = fbUserinfo.getString("user_id");
-				user = userService.getUser(facebookUID);
-				if (user == null) {
-					user = userService.register(facebookUID);
-				}
-				session.setAttribute("loginUser", user);
-			} else if (request.getParameter("facebook_uid") != null) {
+			if (StringUtils.isNotEmpty(request.getParameter("facebook_uid"))) {
 				String facebookUID = request.getParameter("facebook_uid");
 				user = userService.getUser(facebookUID);
 				if (user == null) {
-					user = userService.register(facebookUID);
+					session.setAttribute("facebook_uid", facebookUID);
+					return new ModelAndView("welcome", model);
 				}
 				session.setAttribute("loginUser", user);
+			} else if(StringUtils.isNotEmpty(request.getParameter("signed_request"))) {
+				String signedRequest = request.getParameter("signed_request");
+				JSONObject fbUserinfo = FacebookUtil.parseSignedRequest(signedRequest, FACEBOOK_SECRET_KEY);
+//				JSONObject fbUserinfo = FacebookUtil.parseSignedRequest(signedRequest, "9413a14daea1b773ab8a44dafbecb7fe");
+				if (fbUserinfo == null) {
+					throw new RuntimeException("facebook secret key error");
+				}
+				session.setAttribute("fb_userinfo", fbUserinfo);
+				String oauthToken = fbUserinfo.getString("oauth_token");
+				String sessionKey = oauthToken.split("\\|")[1];
+				String facebookUID = fbUserinfo.getString("user_id");
+				if (facebookUID == null) {
+					response.setStatus(404);
+					return null;
+				}
+				user = userService.getUser(facebookUID);
+				if (user == null) {
+					return new ModelAndView("welcome", model);
+				} else {
+					session.setAttribute("loginUser", user);
+				}
+			} else {
+				response.setStatus(404);
+				return null;
 			}
+			session.setAttribute("facebook_api_id", FACEBOOK_API_ID);
 			logger.debug("当然登录用户:" + JSON.toJSONString(user));
 			List<Friend> friendList =  friendService.getFriendListByUID(user.getId());
 			model.put("friendList", friendList);
+			model.put("friendListJson", JSON.toJSONString(friendList));
 			logger.debug("当然登录用户的好友列表:" + JSON.toJSONString(friendList));
+			List<Message> robotMessage = messageService.getRobotMessage(user.getId());
+			if (robotMessage == null || robotMessage.size() < 0) {
+				messageService.pushRobotMessage(user.getId(), MessageService.content.get(0));
+			}
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());
 		}

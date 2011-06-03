@@ -46,7 +46,7 @@ public class UserService extends BaseService {
 	 * @return
 	 */
 	public User register(String facebookUID) {
-		if (!isNotEmpty(facebookUID)) {
+		if (!isEmpty(facebookUID)) {
 			logger.debug("FacebookUID不能为空");
 			return null;
 		}

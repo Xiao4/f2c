@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +53,10 @@ public class FriendAPI extends BaseAPI {
 		if (user == null) {
 			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 		}
-		if (mobile == null) {
+		if (StringUtils.isEmpty(mobile)) {
 			return createResults(ResultsUtil.PARAMETER_MOBILE_REQUIRE);
 		}
-		if (nickname == null) {
+		if (StringUtils.isEmpty(nickname)) {
 			return createResults(ResultsUtil.PARAMETER_NICKNAME_REQUIRE);
 		}
 		logger.debug("添加联系人, user:[{}], mobile:[{}], nickname:[{}]", new Object[]{JSON.toJSONString(user), mobile, nickname});
@@ -88,7 +89,7 @@ public class FriendAPI extends BaseAPI {
 		if (user == null) {
 			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 		}
-		if (fId == null) {
+		if (StringUtils.isEmpty(fId)) {
 			return createResults(ResultsUtil.PARAMETER_FRIENDID_REQUIRE);
 		}
 		logger.debug("删除联系人, user:[{}], friendUID:[{}]", new Object[]{JSON.toJSONString(user), fId});
@@ -122,7 +123,7 @@ public class FriendAPI extends BaseAPI {
 		if (user == null) {
 			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 		}
-		if (fId == null) {
+		if (StringUtils.isEmpty(fId)) {
 			return createResults(ResultsUtil.PARAMETER_FRIENDID_REQUIRE);
 		}
 		try {

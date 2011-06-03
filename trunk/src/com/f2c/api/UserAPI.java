@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +48,10 @@ public class UserAPI extends BaseAPI {
 		if (user == null) {
 			return createResults(ResultsUtil.USER_LOGIN_FAILURE);
 		}
-		if (request.getParameter("nickname_switch") != null) {
+		if (StringUtils.isNotEmpty(request.getParameter("nickname_switch"))) {
 			nicknameSwitch = parseInt(request.getParameter("nickname_switch"));
 		}
-		if (nickname != null) {
+		if (StringUtils.isNotEmpty(nickname)) {
 			user.setNickname(nickname);
 		}
 		if (nicknameSwitch == 0) {
@@ -70,6 +71,28 @@ public class UserAPI extends BaseAPI {
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage());
 			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
+		}
+	}
+
+	/**
+	 * 注册用户
+	 * 测试地址：http://localhost:8080/f2c/u/register.json
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/register")
+	public Map<String, Object> register(HttpServletRequest request, HttpServletResponse response){
+		HttpSession session = request.getSession();
+		String facebookUID = session.getAttribute("facebook_uid").toString();
+		try {
+			User user = userService.register(facebookUID);
+			return createResults(ResultsUtil.SUCCESS, user);
+		} catch (RuntimeException e) {
+			logger.error(e.getMessage());
+			return createResults(ResultsUtil.DATABASE_ERROR, e.getMessage());
+		} finally {
+			session.removeAttribute("facebook_uid");
 		}
 	}
 }

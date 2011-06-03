@@ -147,18 +147,18 @@ public class OpenPlatform {
 	 * @return
 	 */
 	public static JSONArray directMessagesDialog(int baAuthUid, int targetId,
-			Integer maxId, Integer count) {
+			Integer sinceId, Integer count) {
 		String response = "";
 		UTF8GetMethod getMethod = null;
 		try {
 			getMethod = getGetMethod("/directmessages/dialog.json");
 			getMethod.addParameter("ba_auth_uid", String.valueOf(baAuthUid));
 			getMethod.addParameter("target_id", String.valueOf(targetId));
-			if (maxId != null) {
-				getMethod.addParameter("max_id", String.valueOf(maxId));
+			if (sinceId != null) {
+				getMethod.addParameter("since_id", String.valueOf(sinceId));
 			}
 			if (count != null) {
-				getMethod.getParams().setParameter("count", String.valueOf(count));
+				getMethod.addParameter("count", String.valueOf(count));
 			}
 			httpClient.executeMethod(getMethod);
 			response = getMethod.getResponseBodyAsString();
@@ -359,12 +359,12 @@ public class OpenPlatform {
 		// 蔡峰37013942
 		// 崔超33261973
 		//6744852
-		object = directMessagesAdd(6744852, 48173783, "中文会乱码吗");
+//		object = directMessagesAdd(6744852, 48173783, "中文会乱码吗");
 //		List<String> mobiles = new ArrayList<String>();
 //		mobiles.add("13810138286");
 //		array = invite(48173783, mobiles);
-//		array = directMessagesDialog(48173783, 37013942, null, 1);
-		// array = directMessagesAllDialog(37013942, 227340517, 10);
+		array = directMessagesDialog(48173783, 37013942, 228248918, 1);
+//		 array = directMessagesAllDialog(37013942, null, 1);
 		// System.out.println(a);
 		int count = countDirectMessage(48173783);
 //		object = clearDirectMessageCount(48173783);
