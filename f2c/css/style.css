@@ -94,7 +94,9 @@ a.a_send{width:174px; height:35px; background-position:0 -211px; display:block; 
 a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .contacts .hd a.add{float:right;}
 .contacts .list{padding:1px;border:#dadada solid 1px; background:#fff;}
-.contacts .list ul{height:452px;padding-top:5px;overflow-y:scroll;}
+.contacts .list ul{height:452px;padding-top:5px;overflow-y:scroll; }
+.loading{background:url(../images/ajax-loader.gif) no-repeat center 9px;}
+.loading li{display:none}
 .search{margin:1px 1px 5px 1px;height:23px;}
 .search input.i-n{width:193px; height:21px;padding:0 5px;border:#ccc solid 1px; float:left; line-height:21px;color:#b4b4b4}
 .search input.search_btn{width:27px; height:23px; float:left; background-position:0 -121px;border:0;}

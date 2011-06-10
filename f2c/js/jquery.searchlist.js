@@ -71,7 +71,7 @@
 				if($self.data('searchInit')) return $self;
 				$self.data('searchInit',true);
 				template = new Formater(unescape($self.html()));
-				$self.empty();
+				$self.empty().removeClass('loading');
 			
 			});
 		}

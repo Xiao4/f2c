@@ -71,7 +71,7 @@
 	    <li id="${friend.id}" mobile="${friend.mobile}" mid="${friend.mobileUID}"><span class="name">${friend.nickname}</span><span class="phone">${friend.mobile}</span><span class="editorname"><a href="javascript:void(0);" title="修改姓名"></a></span></li>
   </c:forEach>
 */ %>
-	  <ul id="friendList" class="clearfix">
+	  <ul id="friendList" class="clearfix loading">
      <li id="{id}" mobile="{mobile}" mid="{mobileUID}"><span class="name">{nickname}</span><span class="phone">{mobile}</span><span class="editorname"><a href="javascript:void(0);" title="修改姓名"></a></span></li>
 	  </ul>
 	</div>
