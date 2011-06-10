@@ -1,4 +1,8 @@
 $(function(){
+	$.ajaxSetup({
+		scriptCharset:'utf-8',
+		headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+	});
 	var $editor=$('#editor'),
 	$editorForm=$('#editor_form'),
 	$limit=$('#editor_limit'),
@@ -163,13 +167,13 @@ $.extend(Msg.prototype,{
 	render:function(prev){
 		this.ele=$(__msgFormater.exec(this));
 		if(this.sending)this.ele.removeClass(this.type).addClass('sending');
-		$feedContainer.feedlist(this.userId)[prev?'prepend':'append'](this.ele)
-		if(!prev)$feedContainer.scrollTop(999999);
+		var $txtbox = $feedContainer.feedlist(this.userId);
+		$txtbox[prev?'prepend':'append'](this.ele)
+		if(!prev)$txtbox.scrollTop($txtbox.scrollTop()+500);
 	}
 });
 var __historyCount=3;
 function __history(target){
-return;
 	var fid=$(target.parentNode).attr('rel')
 	var $t=$(target).css('visibility','hidden');
 	var $p=$t.parent();
@@ -221,8 +225,8 @@ $feedContainer.click(function(e){
 	});
 	
 // fetchMsg ------------------------------------------------
-	//var _fetchInterval=setInterval(__fetchMsg,10*1000);
-	//__fetchMsg();
+	var _fetchInterval=setInterval(__fetchMsg,10*1000);
+	__fetchMsg();
 	function __fetchMsg(){
 		$.post('msg/latest.json',null,function(r){
 			if(r.data&&r.data.length)__parseMsg(r.data);
@@ -271,7 +275,17 @@ function __getAddForm(option){
 		+(option.action=='add'?'<h2>china mobile number</h2><p><input name="mobile" class="i-n" type="text" /></p>':'<input type="hidden" name="f_id" value="'+option.fid+'"/>')
 		+'<p><button class="btn_add" type="submit"></button><button class="btn_cancel" type="reset"></button></p></div></form>',option);
 	$box.find('form').submit(function(){
-			var o = __getFormData(this);
+			var o = __getFormData(this),regCM=/^1((3[4-9])|4([7])|(5[0-27-9])|8[278])[0-9]{8}$/;
+			
+			if(!o.nickname){
+				$box.showError("Contact's name is required");
+                                return false;
+			}
+			if(!regCM.test(o.mobile)){
+				$box.showError('Accept only ChinaMobile numbers');
+				return false;
+			}
+
 			$.post(this.action,o,function(r){
 				if(r.code==0){
 					$searchList[(option.action=="add"?'create':'update')](r.data);

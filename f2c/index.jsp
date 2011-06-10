@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <link rel="stylesheet" href="css/interactive/interactive.css" type="text/css" />
 <title>m2you - Send SMS to Chinamobile</title>
+<script type="text/javascript" charset="utf-8">
+	var url = "${redirect}";
+	if(url) top.location = url;
+</script>
 </head>
 <body id="content">
 <% /*

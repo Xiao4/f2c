@@ -3,7 +3,7 @@
 
 /*reset*/
 html{background: none repeat scroll 0 0;color: #333;overflow-y: scroll;}
-body, div, td{font-size: 12px;font-family: verdana;line-height: 1.4em; font-family:'MicroSoft YaHei','Simsun',Tahoma, Helvetica, Arial, sans-serif, nsimsun;}
+body, div, td{font-size: 12px;font-family: verdana;line-height: 1.4em; font-family:'MicroSoft YaHei','Simsun',Helvetica,LucidaGrande,Tahoma,verdana,Arial,sans-serif;}
 body, div, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, legend, input, textarea, p, th, td, dl, dt, dd{margin: 0;padding: 0;}
 table{border-collapse: collapse;border-spacing: 0;}
 img{border:none;}
@@ -149,6 +149,6 @@ span.sign{background-position:-32px -260px;}
 .layer_add h2{margin-bottom:5px;font-weight:bold;}
 .layer_add p{margin-bottom:10px;}
 .btn_add,.btn_cancel{width:60px; height:24px; display:inline-block;}
-.btn_add{background-position:-95px -144px; margin:0 5px 0 30px;}
+.btn_add{background-position:-95px -144px; margin:0 5px 0 57px;}
 .btn_cancel{background-position:-54px -103px;}
 
