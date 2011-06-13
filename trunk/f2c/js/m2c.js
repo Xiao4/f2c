@@ -1,7 +1,7 @@
 $(function(){
 	$.ajaxSetup({
 		scriptCharset:'utf-8',
-		headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8'
 	});
 	var $editor=$('#editor'),
 	$editorForm=$('#editor_form'),
@@ -277,11 +277,11 @@ function __getAddForm(option){
 	$box.find('form').submit(function(){
 			var o = __getFormData(this),regCM=/^1((3[4-9])|4([7])|(5[0-27-9])|8[278])[0-9]{8}$/;
 			
-			if(!o.nickname){
+			if(!o.nickname&&!o.f_name){
 				$box.showError("Contact's name is required");
                                 return false;
 			}
-			if(!regCM.test(o.mobile)){
+			if(option.action=='add'&&!regCM.test(o.mobile)){
 				$box.showError('Accept only ChinaMobile numbers');
 				return false;
 			}
