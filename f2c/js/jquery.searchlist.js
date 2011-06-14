@@ -11,7 +11,6 @@
 					if(!item.mobile)item.hidden='display:none';
 					html+=template.exec(item);
 					var tmp = item.id + '\t'+ item.mobile+ '\t'+ item.nickname;
-console.log(html);
 					cacheList.push(tmp);
 					cache[item.id] = cacheList.length-1;
 					contacts[item.id] = item;
