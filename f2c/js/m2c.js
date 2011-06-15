@@ -159,7 +159,8 @@ function Msg(o){
 	if(o.type=='in'){
 		o.nickName=$searchList.user(o.userId).nickname;
 	}else{
-		o.nickName=ME.nickname;
+		//o.nickName=ME.nickname;
+		o.nickName='Me';
 	}
 	return $.extend(this,$.extend(setting,o));
 }
