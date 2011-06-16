@@ -1,7 +1,8 @@
 $(function(){
 	$.ajaxSetup({
 		scriptCharset:'utf-8',
-		contentType:'application/x-www-form-urlencoded; charset=UTF-8'
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		timeout:35000
 	});
 	var $editor=$('#editor'),
 	$editorForm=$('#editor_form'),
@@ -138,8 +139,9 @@ function __getFormData(form){
 	}
 
 // Msg ------------------------------------------------
+var TIMEZONEOFFSET=(new Date()).getTimezoneOffset();
 function __formatDate(date){
-	var tmpDate=new Date(date);
+	var tmpDate=new Date(date-TIMEZONEOFFSET);
 	return tmpDate.toLocaleTimeString();
 }
 var __msgTemplate='<div class="txt {type}" feedid="{feedId}"><b></b><p><strong>{nickName}:</strong>{text}</p><p><span class="gray">{creatTime}</span></p></div>';
@@ -226,7 +228,7 @@ $feedContainer.click(function(e){
 	});
 	
 // fetchMsg ------------------------------------------------
-	var _fetchInterval=setInterval(__fetchMsg,10*1000);
+	var _fetchInterval=setInterval(__fetchMsg,60*1000);
 	__fetchMsg();
 	function __fetchMsg(){
 		$.post('msg/latest.json',null,function(r){
