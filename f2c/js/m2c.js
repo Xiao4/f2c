@@ -115,7 +115,8 @@ function __getFormData(form){
 			return;
 		}
 		if(target.tagName.toLowerCase()=='li'){
-			__showMsgList($(target).attr('id'));
+			$friendList.find('.current').removeClass('current');
+			__showMsgList($(target).addClass('current').attr('id'));
 		}
 	});
 	function __editFriend(fid){
@@ -142,7 +143,7 @@ function __getFormData(form){
 var TIMEZONEOFFSET=(new Date()).getTimezoneOffset();
 function __formatDate(date){
 	var tmpDate=new Date(date-TIMEZONEOFFSET);
-	return tmpDate.toLocaleTimeString();
+	return tmpDate.toTimeString().split(' ')[0];
 }
 var __msgTemplate='<div class="txt {type}" feedid="{feedId}"><b></b><p><strong>{nickName}:</strong>{text}</p><p><span class="gray">{creatTime}</span></p></div>';
 var __msgFormater=new Formater(__msgTemplate);
@@ -228,14 +229,23 @@ $feedContainer.click(function(e){
 	});
 	
 // fetchMsg ------------------------------------------------
-	var _fetchInterval=setInterval(__fetchMsg,60*1000);
-	__fetchMsg();
+	var __fetchTimeout;
 	function __fetchMsg(){
-		$.post('msg/latest.json',null,function(r){
-			if(r.data&&r.data.length)__parseMsg(r.data);
+		if(__fetchTimeout)clearTimeout(__fetchTimeout);
+		$.ajax({
+			url:'msg/latest.json',
+			method:'POST',
+			success:function(r){
+				if(r.data&&r.data.length)__parseMsg(r.data);
+			},
+			complete:function(){
+				__fetchTimeout=setTimeout(__fetchMsg,40*1000);
+			}
 		});
 	}
+
 	function __parseMsg(msgs){
+		msgs=msgs.reverse();
 		for(var key in msgs){
 			var myMsg=new Msg(msgs[key]);
 			myMsg.render();
@@ -293,6 +303,7 @@ function __getAddForm(option){
 				if(r.code==0){
 					$searchList[(option.action=="add"?'create':'update')](r.data);
 					$.UI.hide();
+					__fetchMsg();
 				}else{
 					$box.showError(r.msg);
 				}
@@ -306,5 +317,8 @@ function __getAddForm(option){
 
 }
 // do after everthing's done ------------------------------------------------
-	$(document).ready(function(){$friendList.find('li:first').click()});
+	$(document).ready(function(){
+		__fetchMsg();
+		$friendList.find('li:first').click();
+	});
 });
