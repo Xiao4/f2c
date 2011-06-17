@@ -107,8 +107,9 @@ a.add{width:51px; height:18px; display:block; background-position:0 -103px;}
 .contacts li span.editorname{width:10%;}
 .contacts li span.editorname a{display:none;}
 
-.contacts li:hover, .contacts li.current{background:#d8dfea}
-.contacts li.new{background:#FFECBF}
+.contacts li:hover {background:#D8DFEA;}
+.contacts li.new{background:#FF6600;color:#FFF}
+.contacts li.current{background:#627AAD;color:#FFF;}
 .contacts li:hover span.editorname a, .contacts li.editing span.editorname a{width:16px; height:16px; background-position:-50px -260px;display:block; margin-top:2px;}
 
 #feedListContainer{height:345px}
