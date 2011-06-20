@@ -51,7 +51,7 @@
      <div class="invite">
 	   <a href="#" id="invite"></a>
 	 </div>
-	<iframe id="fblikebox"  src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D159159414143696&amp;width=185&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=true&amp;height=350" scrolling="no" frameborder="0" style="border:none; overflow:hidden;width:185px;height:350px;margin-top:17px; " allowTransparency="true"></iframe>
+	<iframe id="fblikebox"  src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D159159414143696&amp;width=185&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=true&amp;height=320" scrolling="no" frameborder="0" style="border:none; overflow:hidden;width:185px;height:320px;margin-top:47px; " allowTransparency="true"></iframe>
   </div>
 	<div class="contacts home clearfix">
     <div class="hd clearfix">
