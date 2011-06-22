@@ -115,7 +115,7 @@ function __getFormData(form){
 			return;
 		}
 		if(target.tagName.toLowerCase()=='li'){
-			$friendList.find('.current').removeClass('current');
+			$friendList.find('.current').removeClass('current').end().find('.new').removeClass('new');
 			__showMsgList($(target).addClass('current').attr('id'));
 		}
 	});
@@ -184,7 +184,7 @@ function __history(target){
 	$.post('msg/history.json',{
 			'count':__historyCount,
 			'friend_id':fid,
-			'since_id':$p.find('.txt:first').attr('feedid')||''
+			'max_id':$p.find('.txt:first').attr('feedid')||''
 		},function(r){
 			if(r.data&&r.data.length){
 				var msgs=r.data;//.reverse();
@@ -196,7 +196,7 @@ function __history(target){
 				if(r.data.length<__historyCount){
 					$t.remove();
 				}else{
-					$t.prependTo($p).css('visibility','visible');
+					$t.prependTo($p).show().css('visibility','visible');
 				}
 			
 			}
