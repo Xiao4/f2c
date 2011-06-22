@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -37,7 +37,7 @@
   
   <div class="user_box">
      <div class="namebox clearfix">
-	   <img src="images/photo.jpg" />
+	   <img src="http://graph.facebook.com/${loginUser.facebookUID}/picture" />
 	   <div class="txt">
 	   <p><a href="#">${loginUser.nickname}</a></p>
 	   <p title="xxx">1065810397${loginUser.mobileUID}</p>
@@ -46,11 +46,12 @@
      <div class="sevs">
 	   <p><a id="sevs_home" href="javascript:void(0);"><span class="icon_m2you"></span>m2you&nbsp;home</a></p>
 	   <p><a id="sevs_addcontact" href="javascript:void(0);"><span class="add"></span>Add&nbsp;contact</a></p>
-	   <p><a id="sevs_signature" href="javascript:void(0);"><span class="sign"></span>signature</a></p>
+	   <p><a id="sevs_signature" href="javascript:void(0);"><span class="sign"></span>Edit nickname</a></p>
      </div>
      <div class="invite">
 	   <a href="#" id="invite"></a>
 	 </div>
+
 	<iframe id="fblikebox"  src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D159159414143696&amp;width=185&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=true&amp;height=320" scrolling="no" frameborder="0" style="border:none; overflow:hidden;width:185px;height:320px;margin-top:47px; " allowTransparency="true"></iframe>
   </div>
 	<div class="contacts home clearfix">
@@ -112,7 +113,7 @@
 	</form>
   </div>
   <div class="signature" style="display:none">
-    <h2>Content of signature</h2>
+    <h2>Edit nickname</h2>
     <p>last update: <span class="nickname">${loginUser.nickname}</span></p>
 	<form id="signature_form" action="u/update.json" method="post">
 		<textarea name="nickname"></textarea>
